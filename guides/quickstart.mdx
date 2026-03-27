@@ -1,0 +1,117 @@
+---
+title: Quickstart
+description: Get a Retype documentation website up and running in minutes.
+---
+
+## What is Retype?
+
+Retype is a static website generator that transforms Markdown `.md` files into a complete documentation website — no coding required. Write in Markdown, and Retype handles the rest.
+
+Retype is well-suited for:
+
+- Project documentation
+- Knowledge bases
+- API docs
+- Team wikis
+- Personal blogs or notes
+- Self-published content
+
+The [retype.com](https://retype.com/) website itself is generated using Retype.
+
+## Get started
+
+<Steps>
+  <Step title="Install Retype">
+    Install Retype globally using npm, yarn, or the dotnet CLI. Only one package manager is required.
+
+    <CodeGroup>
+
+    ```bash npm
+    npm install retypeapp --global
+    ```
+
+    ```bash yarn
+    yarn global add retypeapp
+    ```
+
+    ```bash dotnet
+    dotnet tool install retypeapp --global
+    ```
+
+    </CodeGroup>
+
+    For full prerequisites and platform-specific options, see the [Installation](/guides/installation) page.
+
+    Verify the install succeeded:
+
+    ```bash
+    retype --version
+    ```
+  </Step>
+
+  <Step title="Start the development server">
+    Navigate to any folder that contains Markdown files and run:
+
+    ```bash
+    retype start
+    ```
+
+    If you do not have any Markdown files yet, create a `readme.md` file to get started:
+
+    ```markdown
+    # Hello, Retype
+
+    Welcome to my new documentation site.
+    ```
+
+    Retype will automatically:
+
+    1. Find your Markdown files
+    2. Build your website
+    3. Open it in your browser
+    4. Watch for changes and live-reload the browser
+
+    <Note>
+      The development server runs locally and is not accessible publicly. It is intended for authoring and preview only.
+    </Note>
+  </Step>
+
+  <Step title="Edit your Markdown files">
+    With the server running, open any `.md` file in your editor and make a change. Retype detects the change and reloads the browser automatically.
+
+    Retype supports standard Markdown plus a set of extended components such as callouts, tabs, and code blocks. For a full reference, see the [Components](/components/overview) page.
+  </Step>
+
+  <Step title="Build for production">
+    When you are ready to publish, generate the static output files:
+
+    ```bash
+    retype build
+    ```
+
+    By default, the built site is written to a `.retype` folder in your project directory. This location is configurable via the `output` setting in `retype.yml`.
+
+    The output is a plain HTML website with no server-side dependencies. Copy the `.retype` folder to any web host to publish.
+
+    <Tip>
+      You can host your Retype site for free using GitHub Pages, Cloudflare Pages, GitLab Pages, Netlify, or any other static hosting service.
+    </Tip>
+  </Step>
+</Steps>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Configuration" icon="gear" href="/configuration/project">
+    Configure your project title, URL, navigation, and more using `retype.yml`.
+  </Card>
+  <Card title="Components" icon="puzzle" href="/components/overview">
+    Explore callouts, tabs, code blocks, and other built-in content components.
+  </Card>
+  <Card title="Hosting" icon="cloud" href="/hosting/github-pages">
+    Deploy your site to GitHub Pages, Netlify, Cloudflare, or any static host.
+  </Card>
+  <Card title="Page configuration" icon="file" href="/configuration/page">
+    Set per-page options like custom labels, icons, ordering, and visibility.
+  </Card>
+</CardGroup>

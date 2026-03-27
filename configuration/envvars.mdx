@@ -1,0 +1,75 @@
+---
+title: Environment variables
+description: Reference for Retype environment variables, including RETYPE_KEY for Pro license activation and RETYPE_PASSWORD for protected pages.
+---
+
+Retype supports a set of environment variables for configuring sensitive values that should not be stored in source code, such as license keys and passwords. This approach is especially useful for CI/CD pipelines and GitHub Actions workflows.
+
+---
+
+## RETYPE_KEY
+
+The `RETYPE_KEY` environment variable activates your Retype Pro license without storing the key in the `retype.yml` file or the local [wallet](/guides/cli#retype-wallet).
+
+This is the recommended approach for GitHub Actions deployments.
+
+### Adding to GitHub Actions
+
+Store the key as a GitHub Actions secret, then reference it in your workflow:
+
+<Steps>
+  <Step title="Add a repository secret">
+    Navigate to your repository's secrets settings:
+
+    ```
+    https://github.com/<your-organization>/<your-project>/settings/secrets/actions
+    ```
+
+    Click **New repository secret**, set the name to `RETYPE_KEY`, and paste your license key as the value.
+  </Step>
+
+  <Step title="Reference the secret in your workflow">
+    In your `.github/workflows/retype-action.yml`, expose the secret as an environment variable:
+
+    ```yml .github/workflows/retype-action.yml
+    - uses: retypeapp/action-build@latest
+      env:
+        RETYPE_KEY: ${{ secrets.RETYPE_KEY }}
+    ```
+
+    See the [GitHub Actions guide](/guides/github-actions#retype_key) for a complete workflow example.
+  </Step>
+</Steps>
+
+<Note>
+The `RETYPE_KEY` configured as a GitHub secret is not stored anywhere in the repository. It is passed securely to the Retype build process at runtime.
+</Note>
+
+---
+
+## RETYPE_PASSWORD
+
+The `RETYPE_PASSWORD` environment variable sets the password used to access [`protected`](/configuration/page#visibility-protected) and [`private`](/configuration/page#visibility-private) pages.
+
+It is configured using the same process as `RETYPE_KEY` — add it as a repository secret with the name `RETYPE_PASSWORD`.
+
+This is equivalent to passing `--password <value>` to the `retype build` or `retype start` CLI commands.
+
+```yml .github/workflows/retype-action.yml
+- uses: retypeapp/action-build@latest
+  env:
+    RETYPE_KEY: ${{ secrets.RETYPE_KEY }}
+    RETYPE_PASSWORD: ${{ secrets.RETYPE_PASSWORD }}
+```
+
+With both secrets configured, your GitHub repository secrets list will contain entries for both `RETYPE_KEY` and `RETYPE_PASSWORD`.
+
+---
+
+## RETYPE_DEFAULT_HOST
+
+The `RETYPE_DEFAULT_HOST` environment variable sets the default host for the Retype development server, overriding the default `localhost`.
+
+This is equivalent to setting [`serve.host`](/configuration/project#serve-host) in `retype.yml`, but can be configured per-environment without modifying source files.
+
+Configure it as a repository secret or system environment variable using the same process as the other variables above.

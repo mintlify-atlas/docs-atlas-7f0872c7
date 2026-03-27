@@ -1,0 +1,212 @@
+---
+title: Installation
+description: Install Retype using npm, yarn, or the dotnet CLI. Up and running in seconds.
+---
+
+Retype is a command line tool. Installation is quick and you can be up and running within seconds.
+
+## Prerequisites
+
+Retype is installed using either [npm](https://www.npmjs.com/get-npm), [yarn](https://classic.yarnpkg.com/en/docs/install/), or the [dotnet](https://dotnet.microsoft.com/download/dotnet-core) CLI.
+
+You only need **one** of the three package managers — though all three can coexist on the same machine.
+
+| Package manager | macOS | Windows | Linux |
+| --- | --- | --- | --- |
+| [npm](https://www.npmjs.com/get-npm) | Yes | Yes | Yes |
+| [yarn](https://classic.yarnpkg.com/en/docs/install/) | Yes | Yes | Yes |
+| [dotnet](https://dotnet.microsoft.com/download/dotnet-core) | Yes | Yes | Yes |
+
+<Tip>
+  If you already have the `dotnet` CLI installed, `dotnet tool install retypeapp --global` is the fastest option. All package managers produce identical results and the same runtime performance.
+</Tip>
+
+## Install Retype
+
+Copy and run one of the following commands based on the package manager installed on your machine.
+
+<CodeGroup>
+
+```bash npm
+npm install retypeapp --global
+```
+
+```bash yarn
+yarn global add retypeapp
+```
+
+```bash dotnet
+dotnet tool install retypeapp --global
+```
+
+</CodeGroup>
+
+## Verify installation
+
+Confirm that Retype installed correctly by checking the version:
+
+```bash
+retype --version
+```
+
+If the command returns a version number, you are ready to go. If it is not found, Retype is not installed.
+
+## Update
+
+Update to the latest release using the same package manager you used to install Retype.
+
+<CodeGroup>
+
+```bash npm
+npm update retypeapp --global
+```
+
+```bash yarn
+yarn global upgrade retypeapp
+```
+
+```bash dotnet
+dotnet tool update retypeapp --global
+```
+
+</CodeGroup>
+
+## Uninstall
+
+Uninstall Retype using the same package manager you used to install it.
+
+<CodeGroup>
+
+```bash npm
+npm uninstall retypeapp --global
+```
+
+```bash yarn
+yarn global remove retypeapp
+```
+
+```bash dotnet
+dotnet tool uninstall retypeapp --global
+```
+
+</CodeGroup>
+
+After uninstalling, you can also delete the `retype.yml` configuration file and the generated `.retype` output folder from your project.
+
+## Version and tag specific installs
+
+When you need a specific version or tagged release for dependency compatibility, all three package managers support version pinning.
+
+- `@latest` — always installs the latest public release (default if no version is specified)
+- `@next` — installs the upcoming `-preview` release, if available
+
+Replace `[version-or-tag]` in the commands below with the actual version number or tag (for example, `3.5.0`).
+
+<CodeGroup>
+
+```bash npm
+npm install retypeapp@[version-or-tag] --global
+```
+
+```bash yarn
+yarn global add retypeapp@[version-or-tag]
+```
+
+```bash dotnet
+dotnet tool install retypeapp --global --version [version]
+```
+
+</CodeGroup>
+
+## Platform-specific packages
+
+The default `retypeapp` npm package is a bundle of platform-specific packages. The installer automatically selects the correct one for your system. The dotnet installer does the same.
+
+For npm and yarn, you can optionally install a smaller platform-specific package directly, bypassing the bundle.
+
+### macOS
+
+<CodeGroup>
+
+```bash npm
+npm install retypeapp-darwin-x64 --global
+```
+
+```bash yarn
+yarn global add retypeapp-darwin-x64
+```
+
+```bash dotnet
+dotnet tool install retypeapp --global
+```
+
+</CodeGroup>
+
+| OS | Version | Architectures |
+| --- | --- | --- |
+| macOS | 10.15+ | x64, Arm64 |
+
+### Windows
+
+<CodeGroup>
+
+```bash npm
+# 64-bit
+npm install retypeapp-win-x64 --global
+
+# 32-bit
+npm install retypeapp-win-x86 --global
+```
+
+```bash yarn
+# 64-bit
+yarn global add retypeapp-win-x64
+
+# 32-bit
+yarn global add retypeapp-win-x86
+```
+
+```bash dotnet
+dotnet tool install retypeapp --global
+```
+
+</CodeGroup>
+
+| OS | Version | Architectures |
+| --- | --- | --- |
+| Windows 10 | Version 1607+ | x64, x86, Arm64 |
+| Windows 11 | Version 22000+ | x64, x86, Arm64 |
+| Windows Server | 2012+ | x64, x86 |
+| Windows Server Core | 2012+ | x64, x86 |
+| Nano Server | Version 1809+ | x64 |
+
+### Linux
+
+<CodeGroup>
+
+```bash npm
+npm install retypeapp-linux-x64 --global
+```
+
+```bash yarn
+yarn global add retypeapp-linux-x64
+```
+
+```bash dotnet
+dotnet tool install retypeapp --global
+```
+
+</CodeGroup>
+
+| OS | Version | Architectures |
+| --- | --- | --- |
+| Alpine Linux | 3.15+ | x64, Arm64, Arm32 |
+| CentOS Linux | 7 | x64 |
+| CentOS Stream | 8 | x64 |
+| Debian | 10+ | x64, Arm64, Arm32 |
+| Fedora | 36+ | x64 |
+| openSUSE | 15+ | x64 |
+| Oracle Linux | 7+ | x64 |
+| Red Hat Enterprise Linux | 7+ | x64, Arm64 |
+| SUSE Enterprise Linux (SLES) | 12 SP2+ | x64 |
+| Ubuntu | 18.04+ | x64, Arm64, Arm32 |

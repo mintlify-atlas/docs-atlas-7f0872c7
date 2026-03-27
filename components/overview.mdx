@@ -1,0 +1,93 @@
+---
+title: Components
+description: A complete catalog of all built-in Retype Flavored Markdown (RFM) components, organized by category.
+---
+
+Retype extends standard Markdown with a rich set of built-in components called **Retype Flavored Markdown (RFM)**. These components let you create callouts, code groups, diagrams, media embeds, and interactive elements without writing any HTML.
+
+All RFM components use a consistent syntax based on familiar Markdown patterns — fenced blocks, link-style notation, and attribute lists — so they integrate naturally into your writing flow.
+
+## Component catalog
+
+### Text and labels
+
+<CardGroup cols={2}>
+  <Card title="Callouts" icon="bell" href="/components/callouts">
+    Highlight important messages with styled alert boxes. Supports named variants (info, warning, danger, tip, and more), collapsible state, and GitHub Alert syntax.
+  </Card>
+  <Card title="Badge" icon="tag" href="/components/interactive">
+    Inline labels for status, version, or category. Supports variants, sizes, corner styles, icons, and optional links.
+  </Card>
+</CardGroup>
+
+### Layout
+
+<CardGroup cols={2}>
+  <Card title="Columns" icon="layout" href="/components/layout">
+    Arrange content side by side in equal-width columns using the `|||` fence syntax.
+  </Card>
+  <Card title="Panels" icon="layers" href="/components/layout">
+    Collapsible accordion sections using the `===` fence syntax. Stack multiple panels and mix expanded and collapsed states.
+  </Card>
+  <Card title="Tabs" icon="browser" href="/components/layout">
+    Group content into a tabbed interface using the `+++` fence syntax. Each tab is a deep-linkable anchor.
+  </Card>
+  <Card title="Card" icon="credit-card" href="/components/layout">
+    Linked preview cards that pull title, description, and image from page metadata. Supports horizontal, vertical, and compact layouts.
+  </Card>
+  <Card title="Container" icon="box" href="/components/layout">
+    Wrap any content in a `<div>` with a custom CSS class using the `:::` syntax.
+  </Card>
+</CardGroup>
+
+### Code
+
+<CardGroup cols={2}>
+  <Card title="Code blocks" icon="code" href="/components/code">
+    Fenced code blocks with syntax highlighting, line numbers, line highlighting, titles, and code groups.
+  </Card>
+  <Card title="Code snippets" icon="file-code" href="/components/code">
+    Include content from external source files directly into a code block, with optional range, region, title, and language.
+  </Card>
+  <Card title="Mermaid diagrams" icon="git-branch" href="/components/code">
+    Render flowcharts, sequence diagrams, Gantt charts, ER diagrams, and more using the Mermaid diagramming language.
+  </Card>
+  <Card title="Math formulas" icon="function-square" href="/components/code">
+    Render LaTeX math expressions inline or as display blocks using KaTeX.
+  </Card>
+</CardGroup>
+
+### Media
+
+<CardGroup cols={2}>
+  <Card title="Images" icon="image" href="/components/media">
+    Standard Markdown images with Retype extensions for sizing, alignment (left, right, center, plus variants), and custom HTML attributes.
+  </Card>
+  <Card title="YouTube" icon="youtube" href="/components/media">
+    Auto-embed YouTube videos by pasting a URL on its own line. Supports all YouTube player parameters.
+  </Card>
+  <Card title="Embed" icon="globe" href="/components/media">
+    General-purpose iframe embed component with controls for aspect ratio, dimensions, and the wrapping HTML element.
+  </Card>
+</CardGroup>
+
+### Interactive
+
+<CardGroup cols={2}>
+  <Card title="Buttons" icon="mouse-pointer" href="/components/interactive">
+    Styled call-to-action links using `[!button]` syntax. Supports variants, sizes, corner styles, icons, and link targets.
+  </Card>
+  <Card title="Steps" icon="list-ordered" href="/components/interactive">
+    Numbered step sequences using the `>>>` fence syntax. Steps are deep-linkable anchors and support rich inner content.
+  </Card>
+  <Card title="Reference links" icon="link" href="/components/interactive">
+    Prominent linked navigation blocks using `[!ref]` syntax. Automatically resolves the page title as link text.
+  </Card>
+  <Card title="Backlinks" icon="arrow-left" href="/components/interactive">
+    Display a list of pages that link to the current page. Supports manual placement and custom titles. Requires Retype Pro.
+  </Card>
+</CardGroup>
+
+<Note>
+All RFM components work within standard Markdown files (`.md`) and MDX files (`.mdx`). No plugins or configuration are required to enable them — they are built into Retype.
+</Note>

@@ -1,0 +1,122 @@
+---
+title: Troubleshooting
+description: Solutions to common Retype issues including configuration errors, license problems, and build failures.
+---
+
+If you encounter issues while using Retype, this guide covers the most common problems and how to resolve them.
+
+<Warning>
+Ensure your Retype Pro key is licensed for the same `url` that is set in your project `retype.yml`.
+</Warning>
+
+## Common issues
+
+<AccordionGroup>
+  <Accordion title="Website Configuration Error">
+    If you see a **Website Configuration Error** on your published site, your Retype Pro key is not valid for the `url` configured in `retype.yml`.
+
+    Check the following:
+
+    - Your project has a [`url`](https://retype.com/configuration/project/#url) set in `retype.yml`.
+    - The `url` value matches the domain your Retype Pro key is licensed for.
+    - The `config.js` and `retype.css` files in the build output have not been modified.
+
+    Common scenarios that trigger this error:
+
+    1. The site is hosted but `url` is not set in `retype.yml`.
+    2. The `url` is set to a domain not covered by your Pro key.
+    3. A build output file (`config.js` or `retype.css`) has been manually edited.
+
+    If you are confident your key and `url` are correct, contact [hello@retype.com](mailto:hello@retype.com).
+  </Accordion>
+
+  <Accordion title="'Secret is not valid' error">
+    The following error indicates that the `url` in your project configuration does not match the domain your Retype Pro key is licensed for:
+
+    ```
+    ERROR: The specified secret is not valid for the "url" config host: "example.com".
+    ```
+
+    Steps to resolve:
+
+    1. Open `retype.yml` and check the `url` value.
+    2. Confirm the domain matches exactly what is listed in your Pro license.
+    3. If you are using a free Community Key, verify that your site is hosted on GitHub Pages.
+
+    If the issue persists, contact [hello@retype.com](mailto:hello@retype.com).
+  </Accordion>
+
+  <Accordion title="Build fails or produces no output">
+    If `retype build` exits with an error or generates an empty output directory:
+
+    - Confirm Retype is installed correctly by running `retype --version`.
+    - Check that your `retype.yml` is valid YAML — indentation errors are common.
+    - Look for error messages in the terminal output; Retype usually identifies the file and line causing the issue.
+    - Ensure all files referenced in `retype.yml` (such as custom logos or favicons) exist at the specified paths.
+  </Accordion>
+
+  <Accordion title="Port conflict when running retype start">
+    By default, Retype starts a local server on port `5000`. If that port is already in use, you will see a connection error.
+
+    Specify a different port with the `--port` flag:
+
+    ```bash
+    retype start --port 5001
+    ```
+
+    Or set a default port in `retype.yml`:
+
+    ```yaml
+    server:
+      port: 5001
+    ```
+  </Accordion>
+
+  <Accordion title="Pages or content not appearing">
+    If a page exists on disk but does not appear in the site:
+
+    - Confirm the file has a `.md` extension.
+    - Check that the file is not inside a folder that starts with `.` or `_` — Retype ignores these by default.
+    - If you use a `nav` configuration in `retype.yml`, verify the page is included in the navigation tree.
+    - If the page has `visibility: private` or `visibility: protected` in its frontmatter, it will not appear in the public navigation.
+  </Accordion>
+
+  <Accordion title="Theme changes not taking effect">
+    If theme variable changes in `retype.yml` are not reflected on your site:
+
+    - Confirm you have a valid Retype Pro license or have set `start.pro: true`.
+    - Stop and restart `retype start` — the dev server may need a full restart to pick up `retype.yml` changes.
+    - Check that variable names use `kebab-case` and match the documented names exactly.
+    - Do not include the `--` CSS prefix in `retype.yml` values.
+
+    See the [Themes guide](/guides/themes) for more detail.
+  </Accordion>
+
+  <Accordion title="GitHub Actions workflow not running">
+    If the `retype-action.yml` workflow does not trigger or fails:
+
+    - Verify the workflow file is in `.github/workflows/` at the root of the repository.
+    - Confirm the branch name in the workflow matches your repository's default branch (`main`, `master`, etc.).
+    - Check that the job has `permissions: contents: write` — this is required to create and push to the `retype` branch.
+    - Review the Actions tab in your GitHub repository for detailed error logs.
+
+    See the [GitHub Actions guide](/guides/github-actions) for setup instructions.
+  </Accordion>
+
+  <Accordion title="RSS feed not generated">
+    Retype only generates an RSS feed when the project has a `/blog/` folder containing at least one valid blog post.
+
+    - Ensure blog post filenames use the `YYYY-MM-DD-title.md` format, or that each post has a `date` property in its frontmatter.
+    - Confirm the `/blog/` folder is not excluded from the build.
+
+    See the [Blogging guide](/guides/blogging) for setup instructions.
+  </Accordion>
+</AccordionGroup>
+
+## Getting help
+
+If none of the above resolves your issue:
+
+- Check the [Retype documentation](https://retype.com/docs/) for configuration reference.
+- Search or open an issue on the [Retype GitHub repository](https://github.com/retypeapp/retype).
+- Email [hello@retype.com](mailto:hello@retype.com) for Pro license issues.

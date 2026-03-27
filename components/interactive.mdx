@@ -1,0 +1,287 @@
+---
+title: Interactive components
+description: Add buttons, badges, numbered steps, reference links, and backlinks to your Retype documentation pages.
+---
+
+Retype includes several components for navigation and visual labeling: styled buttons and badges, numbered step sequences, prominent reference links, and automatic backlinks.
+
+## Buttons
+
+The Button component uses link syntax with a `!button` identifier.
+
+```md
+[!button Button](https://retype.com/)
+```
+
+The link destination is optional.
+
+```md
+[!button My Button]
+```
+
+### Variants
+
+Set the variant using the `variant` attribute or the shorthand `text|variant` notation.
+
+```md
+[!button text="My Button" variant="success"]
+[!button My Button|success]
+[!button text="My Button" variant="success"](https://retype.com/)
+```
+
+| Variant | |
+| --- | --- |
+| `base` | Uses the configured base color |
+| `primary` (default) | Blue |
+| `secondary` | Gray |
+| `success` | Green |
+| `question` | Purple |
+| `danger` | Red |
+| `warning` | Yellow |
+| `info` | Light blue |
+| `light` | Light |
+| `dark` | Dark |
+| `ghost` | Transparent border |
+| `contrast` | Inverts based on theme |
+
+### Size
+
+```md
+[!button size="xs" text="XSmall"]
+[!button size="s" text="Small"]
+[!button size="m" text="Medium"]   <!-- default -->
+[!button size="l" text="Large"]
+[!button size="xl" text="XLarge"]
+[!button size="2xl" text="2XLarge"]
+[!button size="3xl" text="3XLarge"]
+```
+
+### Corner style
+
+```md
+[!button text="Round"]                       <!-- default -->
+[!button corners="square" text="Square"]
+[!button corners="pill" text="Pill"]
+```
+
+### Link target
+
+Set the `target` attribute to control which tab or window opens the link. The value `blank` is automatically converted to `_blank`.
+
+```md
+[!button target="blank" text="Open in new tab"](https://retype.com/)
+```
+
+### Icons
+
+Buttons support Octicon names, emoji shortcodes, image file paths, and inline SVG as icon values.
+
+```md
+[!button variant="info" icon="person" text="User"]
+[!button icon=":rocket:" iconAlign="right" text="Rocket"]
+[!button icon="../static/retype-icon.svg"]
+```
+
+Use `iconAlign="right"` to place the icon after the text.
+
+### Theme variables
+
+Button colors can be customized in `retype.yml`.
+
+```yaml
+theme:
+  base:
+    button-primary: "#209fb5"
+    button-primary-text: "#eff1f5"
+```
+
+## Badges
+
+The Badge component is similar to Button but is designed for inline labeling rather than call-to-action use. The link is optional.
+
+```md
+[!badge Badge](https://retype.com/)
+[!badge Badge]
+```
+
+Badges share the same `variant`, `size`, `corners`, `target`, and `icon` options as buttons.
+
+```md
+[!badge text="My Badge" variant="success"]
+[!badge My Badge|success]
+[!badge variant="info" icon="person" text="User"]
+[!badge size="xs" text="XSmall"]
+[!badge corners="pill" text="Pill"]
+[!badge target="blank" text="Retype"](https://retype.com/)
+```
+
+### Theme variables
+
+Badge colors can be customized in `retype.yml`.
+
+```yaml
+theme:
+  base:
+    badge-primary: "#209fb5"
+    badge-primary-text: "#eff1f5"
+```
+
+## Steps
+
+The Steps component creates a numbered sequence using the `>>>` fence syntax.
+
+```md
+>>> Create the project
+Initialize a new project in your workspace.
+
+>>> Install dependencies
+Run the install command to fetch all required packages.
+
+>>> Start the server
+Launch the development server and verify it is running.
+>>>
+```
+
+<Note>
+The step title must be separated from `>>>` by one space. `>>> Step 1` works; `>>>Step 1` does not.
+</Note>
+
+### Custom start number
+
+Start the sequence at a custom number using the `>>> N. Title` syntax. Subsequent steps auto-increment.
+
+```md
+>>> 12. Configure the server
+Server configuration instructions here.
+
+>>> Update DNS settings
+DNS update steps here.
+
+>>> Verify connectivity
+Verification steps here.
+>>>
+```
+
+The `12. ` prefix is stripped from the rendered title. Steps are numbered 12, 13, 14.
+
+### Inner content
+
+Steps can contain any Markdown content or other Retype components, including code blocks, tabs, and callouts.
+
+````md
+>>> Install the package
+
+  +++ npm
+  ```
+  npm install retypeapp --global
+  ```
+  +++ yarn
+  ```
+  yarn global add retypeapp
+  ```
+  +++
+
+>>> Start Retype
+
+  ```bash
+  retype start
+  ```
+
+>>>
+````
+
+### Anchors
+
+Each step generates an anchor based on its title. Link directly to a step using the anchor in a URL.
+
+```md
+[Go to step 2](#install-dependencies)
+```
+
+## Reference links
+
+The `[!ref]` component renders a prominent linked block, similar in function to a regular hyperlink but more visually distinct.
+
+```md
+[!ref](/guides/getting-started.md)
+```
+
+For local pages, Retype automatically uses the page title as the link text. No text is required.
+
+### Custom text
+
+```md
+[!ref Getting Started](/guides/getting-started.md)
+```
+
+### Custom icon
+
+The `icon` attribute accepts an Octicon name, an emoji shortcode, or an image file URL.
+
+```md
+[!ref icon="rocket"](/guides/getting-started.md)
+[!ref icon=":rocket:"](/guides/getting-started.md)
+[!ref icon="../static/retype-icon.svg"](/guides/getting-started.md)
+```
+
+Combine `icon` and `text`:
+
+```md
+[!ref icon="rocket" text="To the moon"](/guides/getting-started.md)
+```
+
+### Link target
+
+```md
+[!ref target="blank" text="Retype"](https://retype.com/)
+```
+
+## Backlinks
+
+<Note>
+Backlinks require an active [Retype Pro](/pro/overview) license.
+</Note>
+
+The Backlinks component displays a list of all pages within the project that link to the current page. By default, backlinks are automatically appended to the end of each page.
+
+To manually place backlinks anywhere on the page (which also disables the automatic placement), use:
+
+```md
+[!backlinks]
+```
+
+### Custom title
+
+```md
+[!backlinks "Related pages"]
+```
+
+### Configuration
+
+Backlinks can be configured at the project level in `retype.yml` or overridden per page in frontmatter.
+
+```yaml retype.yml
+backlinks:
+  enabled: true
+  title: "Referenced by"
+  maxResults: 10
+```
+
+```yaml page frontmatter
+---
+backlinks:
+  enabled: true
+  title: "See also"
+  maxResults: 5
+---
+```
+
+### Behavior
+
+The backlinks component renders only when:
+
+1. The backlinks feature is enabled at the project or page level.
+2. At least one other page in the project links to the current page.
+3. A valid Retype Pro license is active.
+
+If no pages link to the current page, the component does not render even when manually placed.

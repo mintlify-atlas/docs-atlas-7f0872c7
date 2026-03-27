@@ -1,0 +1,509 @@
+---
+title: CLI Reference
+description: Complete reference for all Retype CLI commands and options.
+---
+
+The Retype CLI is clean and simple. The majority of the time you will run just one command: `retype start`.
+
+<Note>
+  Be sure to review the [project configuration](/configuration/project) options available within the **retype.yml** file — it unlocks more power, flexibility, and customization.
+</Note>
+
+The `--help` option can be passed with any command to get additional details. For example, `retype start --help` returns all options for the `retype start` command.
+
+The command `retype --version` returns the current version number of your Retype install.
+
+## Usage synopsis
+
+```
+Description:
+  Retype CLI
+
+Usage:
+  retype [command] [options]
+
+Options:
+  --info          Display Retype information
+  -v, --version   Show version information
+  -?, -h, --help  Show help and usage information
+
+Commands:
+  start <path>  Build and serve the project using a local development only web server
+  init <path>   Initialize a new Retype project
+  build <path>  Generate a static website from the project
+  serve <path>  Serve the website in a local development only web server
+  clean <path>  Clean the output directory
+  stop <path>   Stop Retype web servers
+  wallet        Manage Your Retype Keys
+```
+
+---
+
+## `retype start`
+
+The `retype start` command is the easiest way to get your project built and running in a browser within seconds.
+
+```bash
+retype start
+```
+
+`retype start` also watches for file changes and automatically updates the website in your browser with the updated page. It automatically opens the default browser on your machine and loads the website. You can suppress this with `--no-open` or its alias `-n`.
+
+```bash
+retype start -n
+```
+
+To have Retype wait briefly before reacting to file changes, pass `--debounce <ms>`. This is useful when multiple file save events might happen in quick succession.
+
+```bash
+retype start --debounce 500
+```
+
+### Options
+
+```
+Description:
+  Build and serve the project using a local development only web server
+
+Usage:
+  retype start [<path>] [options]
+
+Arguments:
+  <path>  Path to the project root or project config file [Optional]
+```
+
+<ParamField path="--debounce" type="number">
+  Rebuild delay in milliseconds. Useful when multiple file save events occur in rapid succession.
+</ParamField>
+
+<ParamField path="--key" type="string">
+  Your Retype license key. Keys can also be stored in the wallet so they do not need to be passed on every command.
+</ParamField>
+
+<ParamField path="--host" type="string">
+  Custom host name or IP address for the local web server.
+</ParamField>
+
+<ParamField path="--password" type="string">
+  Private page password used to unlock password-protected pages during the local preview.
+</ParamField>
+
+<ParamField path="--port" type="number">
+  Custom TCP port for the local web server.
+</ParamField>
+
+<ParamField path="--pro" type="boolean">
+  Enable Retype Pro preview mode.
+</ParamField>
+
+<ParamField path="-n, --no-open" type="boolean">
+  Prevent the default web browser from being opened automatically when the server starts.
+</ParamField>
+
+<ParamField path="-v, --verbose" type="boolean">
+  Enable verbose logging output.
+</ParamField>
+
+<ParamField path="-a, --api" type="boolean">
+  Watch for API changes in addition to content changes.
+</ParamField>
+
+<Warning>
+  While it is technically possible to host your website publicly using `retype start` on your own server hardware, **do not do this**. Use a dedicated hosting service such as GitHub Pages, Netlify, Cloudflare Pages, or any other web hosting or VPS service. If you really want to try public self-hosting with the built-in web server, use [`retype serve`](#retype-serve) instead.
+</Warning>
+
+---
+
+## `retype init`
+
+The `retype init` command stubs out a basic **retype.yml** configuration file with a few initial values.
+
+From your command line, navigate to any folder that has one or more Markdown `.md` files (such as the root of a GitHub project) and run:
+
+```bash
+retype init
+```
+
+This creates a basic **retype.yml** with the following default values:
+
+```yaml retype.yml
+input: .
+output: .retype
+url: example.com # Add your website here
+branding:
+  title: Project Name
+  label: Docs
+links:
+  - text: Getting Started
+    link: https://retype.com/guides/getting-started/
+footer:
+  copyright: "&copy; Copyright {{ year }}. All rights reserved."
+```
+
+All configs are optional, but the sample above shows options you will typically want to configure first. If a **retype.yml** already exists in the project, `retype init` will not overwrite it.
+
+To change the project title, update the `branding.title` config:
+
+```yaml
+branding:
+  title: Company X
+```
+
+<Note>
+  The **retype.yml** file is not strictly required, but it is how custom configurations are passed to Retype. See the [project configuration](/configuration/project) docs for a full list of all options.
+</Note>
+
+### Options
+
+```
+Description:
+  Initialize a new Retype project
+
+Usage:
+  retype init [<path>] [options]
+
+Arguments:
+  <path>  Path to the project root [Optional]
+```
+
+<ParamField path="--override" type="string">
+  JSON configuration object that overrides Retype config values. See [`--override`](#retype---override) for full details and examples.
+</ParamField>
+
+<ParamField path="-v, --verbose" type="boolean">
+  Enable verbose logging output.
+</ParamField>
+
+---
+
+## `retype build`
+
+The `retype build` command generates a static website from your `.md` files.
+
+```bash
+retype build
+```
+
+Within seconds, Retype creates a new website and saves it to the `output` location defined in **retype.yml**. By default, the output location is a folder named `.retype`.
+
+You can customize the input and output paths in **retype.yml**:
+
+```yaml
+# Read from a docs/ subfolder, write to a website/ folder
+input: docs
+output: website
+```
+
+```yaml
+# For GitHub Pages hosting from the docs/ folder
+input: src
+output: docs
+```
+
+### Options
+
+```
+Description:
+  Generate a static website from the project
+
+Usage:
+  retype build [<path>] [options]
+
+Arguments:
+  <path>  Path to the project root or project config file [Optional]
+```
+
+<ParamField path="--output" type="string">
+  Custom path to the output directory, overriding the value set in **retype.yml**.
+</ParamField>
+
+<ParamField path="--key" type="string">
+  Your Retype license key. The key is **not** stored in the wallet when passed here — it must be passed with each call to `retype build`. Use `retype wallet --add` to store it persistently.
+</ParamField>
+
+<ParamField path="--password" type="string">
+  Private page password used to unlock password-protected pages during the build.
+</ParamField>
+
+<ParamField path="--override" type="string">
+  JSON configuration object that overrides project config values. See [`--override`](#retype---override) for full details and examples.
+</ParamField>
+
+<ParamField path="--strict" type="boolean">
+  **[PRO]** Return a non-zero exit code if the build had errors or warnings. Useful in CI pipelines.
+</ParamField>
+
+<ParamField path="-w, --watch" type="boolean">
+  Watch for file changes and rebuild automatically.
+</ParamField>
+
+<ParamField path="-v, --verbose" type="boolean">
+  Enable verbose logging output.
+</ParamField>
+
+<ParamField path="-a, --api" type="boolean">
+  Watch for API changes in addition to content changes.
+</ParamField>
+
+---
+
+## `retype serve`
+
+The `retype serve` command starts a local development web server and hosts your pre-built static website.
+
+```bash
+retype serve
+```
+
+A Retype generated website is a static HTML and JavaScript site — no special server-side runtime (Node, PHP, Ruby, etc.) is required. It can be hosted on any web server or hosting service such as GitHub Pages, GitLab Pages, Netlify, or Cloudflare Pages.
+
+<Tip>
+  You can use any other local web server instead of `retype serve`. Retype only includes a web server out of convenience, not as a requirement. Alternatives include [live-server](https://www.npmjs.com/package/live-server) and [static-server](https://www.npmjs.com/package/static-server).
+</Tip>
+
+### Options
+
+```
+Description:
+  Serve the website in a local development only web server
+
+Usage:
+  retype serve [<path>] [options]
+
+Arguments:
+  <path>  Path to the project root or project config file [Optional]
+```
+
+<ParamField path="--host" type="string">
+  Custom host name or IP address for the local web server.
+</ParamField>
+
+<ParamField path="--port" type="number">
+  Custom TCP port for the local web server.
+</ParamField>
+
+<ParamField path="-l, --live" type="boolean">
+  Live reload open browsers when a change in the project output is detected.
+</ParamField>
+
+<ParamField path="-v, --verbose" type="boolean">
+  Enable verbose logging output.
+</ParamField>
+
+---
+
+## `retype clean`
+
+The `retype clean` command deletes the Retype-managed files from the `output` folder.
+
+Files you manually add (or that another process adds) to the `output` folder are not removed by `retype clean`.
+
+Including `--dry` triggers a dry run and lists the files that _would_ be deleted without actually deleting anything.
+
+### Options
+
+```
+Description:
+  Clean the output directory
+
+Usage:
+  retype clean [<path>] [options]
+
+Arguments:
+  <path>  Path to the project root or project config file [Optional]
+```
+
+<ParamField path="--dry" type="boolean">
+  List the files and directories that would be deleted without actually deleting them.
+</ParamField>
+
+<ParamField path="-v, --verbose" type="boolean">
+  Enable verbose logging output.
+</ParamField>
+
+---
+
+## `retype stop`
+
+The `retype stop` command stops the Retype web server for the current project.
+
+```bash
+retype stop
+```
+
+If you have more than one Retype web server running, use `--list` to review the available servers:
+
+```bash
+retype stop --list
+```
+
+Servers can be stopped by `--id`, `--index`, or `--port`. Use `retype stop --list` first to discover available `id` and `index` values.
+
+```bash
+retype stop --port 5001
+```
+
+Use `--all` to stop all running Retype web servers at once:
+
+```bash
+retype stop --all
+```
+
+### Options
+
+```
+Description:
+  Stop Retype web servers
+
+Usage:
+  retype stop [<path>] [options]
+
+Arguments:
+  <path>  Path to the project root or project config file [Optional]
+```
+
+<ParamField path="--list" type="boolean">
+  List all running Retype web servers, including servers that may not be stoppable.
+</ParamField>
+
+<ParamField path="--all" type="boolean">
+  Stop all running Retype web servers.
+</ParamField>
+
+<ParamField path="--id" type="string">
+  Stop a specific Retype web server by its id. Use `--list` to find the id.
+</ParamField>
+
+<ParamField path="--index" type="number">
+  Stop a specific Retype web server by its index. Use `--list` to find the index.
+</ParamField>
+
+<ParamField path="--port" type="number">
+  Stop a specific Retype web server by its port number.
+</ParamField>
+
+<ParamField path="-v, --verbose" type="boolean">
+  Enable verbose logging output.
+</ParamField>
+
+---
+
+## `retype wallet`
+
+The `retype wallet` command manages Retype license keys. Keys are stored in an encrypted wallet file called **license.dat**.
+
+To add a key to your wallet:
+
+```bash
+retype wallet --add <your-license-key-here>
+```
+
+Once a key is added to your wallet, it does not need to be added again. Retype reads the key from the wallet automatically on future builds.
+
+A key can also be passed directly during a build, but it is **not** stored in the wallet — you would need to pass it with each call to `retype build`.
+
+```bash
+retype build --key <your-license-key-here>
+```
+
+<Note>
+  You can also configure a `RETYPE_KEY` environment variable as an alternative to using the wallet. See the [environment variables](/configuration/envvars#retype_key) docs.
+</Note>
+
+### Options
+
+```
+Description:
+  Manage Your Retype Keys
+
+Usage:
+  retype wallet [options]
+```
+
+<ParamField path="--add" type="string">
+  Add a key to the wallet. The key is stored persistently and used for all future builds.
+</ParamField>
+
+<ParamField path="--remove" type="string">
+  Remove a specific key from the wallet.
+</ParamField>
+
+<ParamField path="--list" type="boolean">
+  List all keys currently stored in the wallet.
+</ParamField>
+
+<ParamField path="--clear" type="boolean">
+  Clear all keys from the wallet.
+</ParamField>
+
+---
+
+## `retype --override`
+
+The `--override` option is supported by the [`retype build`](#retype-build) and [`retype init`](#retype-init) commands. It allows you to dynamically modify **retype.yml** project configurations at build time without maintaining multiple config files.
+
+The option accepts an escaped JSON object. Retype merges the **retype.yml** configuration with the provided JSON object — values in the JSON override take precedence over **retype.yml** values.
+
+<Note>
+  The `--override` JSON object may contain duplicate keys, which are processed sequentially. Last in wins.
+</Note>
+
+### Basic config
+
+Given this **retype.yml**:
+
+```yaml retype.yml
+url: https://retype.com
+```
+
+The following command builds the website with the URL `https://beta.retype.com`:
+
+```bash
+retype build --override "{ \"url\": \"https://beta.retype.com\" }"
+```
+
+### Nested config
+
+Given this **retype.yml**:
+
+```yaml retype.yml
+branding:
+  title: Retype
+  label: v1.10
+```
+
+To change the `label` to `beta` without modifying the file:
+
+```bash
+retype build --override "{ \"branding\": { \"label\": \"beta\"} }"
+```
+
+To completely remove all configs in `branding`, pass `null`:
+
+```bash
+retype build --override "{ \"branding\": null }"
+```
+
+### Add to list
+
+Given this **retype.yml**:
+
+```yaml retype.yml
+links:
+  - link: Retype
+    text: https://retype.com
+```
+
+The following command appends a GitHub link to the `links` list:
+
+```bash
+retype build --override "{ \"links\": [{ \"link\": \"https://github.com/retypeapp/retype\", \"text\": \"GitHub\" }] }"
+```
+
+### Remove config
+
+Passing `null` as a value removes the corresponding configuration entirely. The following builds the website as though `url` was never configured:
+
+```bash
+retype build --override "{ \"url\": null }"
+```

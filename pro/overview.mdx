@@ -1,0 +1,102 @@
+---
+title: "Retype Pro"
+description: "Unlock unlimited pages, Pro-only features, and remove Retype branding with a Retype Pro or Enterprise license."
+---
+
+Retype Pro and Enterprise unlock additional features within the same `retypeapp` installation you already have. No separate product or installer is required — adding your key activates everything automatically.
+
+## Plans and pricing
+
+| | Free | Pro | Enterprise |
+| --- | :---: | :---: | :---: |
+| Price | Free | $149 | $499 |
+| Max pages per project | 100 | Unlimited | Unlimited |
+| Pro projects | 0 | 1 domain | Unlimited |
+| Free upgrades | — | 3 years | 3 years |
+| Renewal discount | — | 20% off | 20% off |
+| Key required | No | Yes | Yes |
+
+Forever upgrade add-ons are available at purchase: +$149 for Pro Forever, +$499 for Enterprise Forever.
+
+<Note>
+  A **Pro** key is registered to one domain name or subdomain (e.g., `example.com` **or** `docs.example.com`). An **Enterprise** key covers one domain name **and** all its subdomains (e.g., `example.com` **and** `*.example.com`).
+</Note>
+
+## Pro-only features
+
+All features below are available on Pro and Enterprise. Free tier does not include these features.
+
+| Feature | Description |
+| --- | --- |
+| Unlimited pages | Remove the 100-page limit per project |
+| Remove "Powered by Retype" | Hide the Retype branding footer |
+| [Backlinks](/components/overview) | `[[Backlinks]]` component for automatic back-reference linking |
+| [Breadcrumb navigation](/configuration/project) | Show hierarchical breadcrumb trail at the top of pages |
+| [Custom themes](/guides/themes) | Full theme customization via CSS variables |
+| [Custom UI labels](/configuration/project) | Override built-in interface text labels |
+| [Default color scheme](/configuration/project) | Set light or dark mode as the project default |
+| [Hub link](/configuration/project) | Add a hub link in the navigation bar |
+| [Last updated label](/components/overview) | Display the last-modified date on pages |
+| [`nav.badge` setting](/configuration/page) | Add badges to navigation items |
+| [Navigation icon control](/configuration/project) | Show or hide icons in the sidebar |
+| [Next/Previous navigation control](/configuration/project) | Configure or disable next/prev page links |
+| [Outbound links](/configuration/project) | Control behavior of external links |
+| [Private and protected pages](/configuration/page) | Restrict access to specific pages |
+| [`branding.baseColor` setting](/configuration/project) | Set a base brand color |
+| [Search filtering](/configuration/project) | Exclude pages from search results |
+| [Stack navigation mode](/configuration/project) | Enable stacked (drill-down) sidebar navigation |
+| [Strict build mode](/guides/cli) | Return a non-zero exit code on build errors or warnings |
+| [Table of contents](/configuration/project) | Control the in-page TOC |
+| Future Pro features | All future Pro-only features included |
+
+## Try Pro before purchasing
+
+You can preview all Pro features locally without a key.
+
+**Option 1:** Pass the `--pro` flag when starting:
+
+```bash
+retype start --pro
+```
+
+**Option 2:** Add `pro: true` to your `retype.yml`:
+
+```yaml retype.yml
+start:
+  pro: true
+```
+
+<Note>
+  In preview mode, the "Powered by Retype" branding remains enabled and the 100-page limit is still enforced. All other Pro features are available for testing.
+</Note>
+
+## Activate your key
+
+After purchasing, your key is emailed to you. See the [key setup guide](/guides/key-setup) for full instructions on the three ways to activate it:
+
+- Add to your local wallet with `retype wallet --add <key>`
+- Pass per-build with `retype build --key <key>`
+- Set the `RETYPE_KEY` environment variable (recommended for CI/hosting)
+
+## Licensing details
+
+<AccordionGroup>
+  <Accordion title="Does my website stop working if I don't renew?">
+    No. Your project continues to build and serve pages indefinitely, even without renewal. The only limitation is that you cannot upgrade to a newer version of Retype released after your key's end date.
+  </Accordion>
+  <Accordion title="How many users or developers are covered?">
+    Licenses are per project (website), not per person or server. One license covers an unlimited number of users, authors, and developers working on that project.
+  </Accordion>
+  <Accordion title="What counts as a project?">
+    Each `retype.yml` file used to generate a website is one project. The `url` setting in your `retype.yml` must match the URL registered to your key.
+  </Accordion>
+  <Accordion title="Can I change the URL registered to my key?">
+    Within the first 15 days of purchase, one change to a different domain or subdomain is allowed. Send a request to hello@retype.com. After 15 days, a new key is required.
+  </Accordion>
+  <Accordion title="Can I purchase multiple licenses?">
+    Yes. Each license is created and managed separately. Purchase one now and additional licenses at any future time.
+  </Accordion>
+  <Accordion title="Are custom licensing options available?">
+    Yes. Email hello@retype.com with your requirements.
+  </Accordion>
+</AccordionGroup>

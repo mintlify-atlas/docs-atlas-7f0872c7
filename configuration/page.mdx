@@ -1,0 +1,492 @@
+---
+title: Page configuration
+description: Reference for all page-level front matter options in Retype, including labels, icons, ordering, visibility, layout, author, and table of contents settings.
+---
+
+Individual `.md` pages are configured using a YAML front matter block at the top of the file.
+
+```md sample.md
+---
+label: Sample
+layout: page
+order: 100
+---
+# Sample
+
+This is a sample page.
+```
+
+## Separate .yml file
+
+If you prefer to keep configuration out of the Markdown file, create a paired **.yml** file with the same base name:
+
+```md sample.md
+# Sample
+
+This is a sample page.
+```
+
+```yml sample.yml
+label: Sample
+layout: page
+order: 100
+```
+
+<Note>
+If configuration exists in both the `.md` front matter and the `.yml` file, the front matter takes precedence and the `.yml` file is ignored entirely.
+</Note>
+
+---
+
+## label
+
+<ParamField path="label" type="string">
+  Custom label for the navigation node of this page.
+
+  ```yml
+  label: Custom label
+  ```
+</ParamField>
+
+---
+
+## icon
+
+<ParamField path="icon" type="string">
+  Custom icon for this page's navigation node. Accepts an Octicon name, emoji shortcode, inline `<svg>`, or path to an image file.
+
+  ```yml
+  icon: rocket            # Octicon
+  icon: ":rocket:"        # emoji shortcode
+  icon: ../static/r.png   # image path
+  ```
+</ParamField>
+
+---
+
+## order
+
+<ParamField path="order" type="string | number">
+  Controls the position of this page in the left sidebar navigation.
+
+  - A higher positive number pushes the page higher in the navigation.
+  - A negative number pushes the page lower.
+  - An alpha string is ordered against other labels alphabetically.
+  - A `vSemVer` value (e.g. `v2.0`) is ordered with newest at top.
+
+  ```yml
+  order: 100    # near the top
+  order: -100   # near the bottom
+  order: beta   # alphabetical ordering
+  order: v2.0   # semantic version ordering
+  ```
+
+  | Priority | Type | Notes |
+  | --- | --- | --- |
+  | Highest | Positive number | Larger = higher |
+  | — | Alpha string | Ordered against labels A→Z |
+  | — | No order set | Alphabetical by label/title/filename |
+  | — | Alpha string (low) | e.g. `zulu` |
+  | — | `vSemVer` (newer) | Grouped below alpha items |
+  | Lowest | Negative number | Smaller = lower |
+</ParamField>
+
+---
+
+## tags
+
+<ParamField path="tags" type="list">
+  One or more tags describing the specific content of this page. Tags differ from `category` — tags are granular descriptors, categories are broad groupings.
+
+  Retype auto-generates individual tag summary pages at `<url>/tags/<tag>` and a `<url>/tags` index page.
+
+  ```yml
+  tags: [guide, configuration, installation]
+  ```
+
+  ```yml
+  tags:
+    - guide
+    - configuration
+  ```
+</ParamField>
+
+---
+
+## category
+
+<ParamField path="category" type="string | list">
+  A broad category grouping for this page. Also accepted as `categories`.
+
+  Retype auto-generates individual category summary pages at `<url>/categories/<category>`.
+
+  ```yml
+  category: [news, general]
+  ```
+</ParamField>
+
+---
+
+## description
+
+Set a custom meta description for the page using the `meta` object:
+
+```yml
+---
+meta:
+  description: "A concise description of this page for search engines."
+---
+```
+
+This value is used for the `<meta name="description">`, `og:description`, and `twitter:description` tags.
+
+---
+
+## visibility
+
+<ParamField path="visibility" type="string" default="public">
+  Controls page visibility and password protection.
+
+  | Mode | In nav | In search | Password required | Description |
+  | --- | :---: | :---: | :---: | --- |
+  | `public` | Yes | Yes | No | Normal public page |
+  | `hidden` | No | No | No | Accessible by direct URL; not shown in nav or search |
+  | `protected` | Yes | No | Yes | Shown in nav but requires a password |
+  | `private` | No | No | Yes | Hidden from nav and requires a password |
+
+  ```yml
+  ---
+  visibility: hidden
+  ---
+  # Draft Page
+  ```
+
+  For `protected` and `private` pages, set the password with the `--password` flag or the [`RETYPE_PASSWORD`](/configuration/envvars#retype_password) environment variable:
+
+  ```
+  retype build --password <your-password>
+  ```
+</ParamField>
+
+---
+
+## layout
+
+<ParamField path="layout" type="string" default="default">
+  The page layout to use.
+
+  | Layout | Description |
+  | --- | --- |
+  | `default` | Standard layout with left sidebar navigation and right TOC. Added to main navigation. |
+  | `page` | Same as `default` but not added to main navigation. |
+  | `central` | No left or right sidebars. |
+  | `blog` | Blog layout with Newer/Older navigation. Not added to main navigation. |
+
+  ```yml
+  layout: central
+  ```
+</ParamField>
+
+---
+
+## author
+
+<ParamField path="author" type="string | list | object">
+  The author or authors of this page. Also accepted as `authors`.
+
+  ```yml
+  author: Frank
+  ```
+
+  ```yml
+  authors: [Frank, Annette Jones, steffen@example.com]
+  ```
+
+  Full author objects support `name`, `email`, `link`, and `avatar`:
+
+  ```yml
+  authors:
+    - name: Frank Esposito
+      email: frank@example.com
+      link: https://twitter.com/frank
+      avatar: https://example.com/frank.jpg
+    - Annette Jones
+  ```
+</ParamField>
+
+---
+
+## date
+
+<ParamField path="date" type="string">
+  Custom publish date for the page. Must be in `yyyy-mm-dd` or `yyyy-mm-ddThh:mm` format. Used to order blog pages (newest first).
+
+  ```yml
+  date: 2024-06-15
+  date: 2024-06-15T09:00
+  ```
+</ParamField>
+
+---
+
+## created
+
+<ParamField path="created" type="string">
+  Custom creation date for this page. Use this to record when content first went live, separate from any subsequent edits tracked by [`lastUpdated`](#lastupdated).
+
+  ```yml
+  created: 2024-05-14
+  ```
+</ParamField>
+
+---
+
+## lastUpdated
+
+<ParamField path="lastUpdated" type="string | object">
+  Controls the last updated footer metadata for this page. Overrides the [project-level](/configuration/project#lastupdated) setting for this page.
+
+  **Simple string form** — set a manual date:
+
+  ```yml
+  lastUpdated: 2026-03-01
+  ```
+
+  **Object form** — set both date and author manually:
+
+  ```yml
+  lastUpdated:
+    date: 2026-03-12
+    by: Documentation Team
+  ```
+
+  **Git-backed form** — configure automatic generation:
+
+  ```yml
+  lastUpdated:
+    date:
+      enabled: true
+      source: author     # or: committer
+    by:
+      enabled: true
+      source: committer
+  ```
+
+  <Warning>Manual values and Git-backed values are not mixed on the same page. Setting either `lastUpdated` or `lastUpdatedBy` manually disables Git-backed generation for that page.</Warning>
+</ParamField>
+
+---
+
+## lastUpdatedBy
+
+<ParamField path="lastUpdatedBy" type="string">
+  Shorthand to set only the author shown in the last updated footer. Equivalent to `lastUpdated.by`.
+
+  ```yml
+  lastUpdated: 2026-03-12
+  lastUpdatedBy: Documentation Team
+  ```
+</ParamField>
+
+---
+
+## toc
+
+**Retype Pro only.** Page-level Table of Contents settings override project-level defaults.
+
+<ParamField path="toc.depth" type="string | number" default="2-3">
+  Heading depth range to include in the right sidebar Table of Contents.
+
+  ```yml
+  toc:
+    depth: 2-4
+  ```
+</ParamField>
+
+<ParamField path="toc.label" type="string">
+  Custom label for the top of the Table of Contents column on this page.
+
+  ```yml
+  toc:
+    label: On this page
+  ```
+</ParamField>
+
+---
+
+## backlinks
+
+**Retype Pro only.** Page-level backlink settings override project-level defaults.
+
+<ParamField path="backlinks.enabled" type="boolean" default="true">
+  Enable or disable the "See also" backlinks section on this page.
+
+  ```yml
+  backlinks:
+    enabled: false
+  ```
+</ParamField>
+
+<ParamField path="backlinks.title" type="string" default="See also">
+  Custom heading above the backlinks section on this page.
+</ParamField>
+
+<ParamField path="backlinks.maxResults" type="number" default="12">
+  Maximum number of backlinks to display on this page.
+</ParamField>
+
+---
+
+## nav
+
+**Retype Pro only.**
+
+<ParamField path="nav.badge" type="string | object">
+  Add a badge to this page's sidebar navigation item.
+
+  ```yml
+  nav:
+    badge: NEW           # simple text badge
+    badge: NEW|info      # text with variant shorthand
+  ```
+
+  Full object form:
+
+  ```yml
+  nav:
+    badge:
+      text: BETA
+      variant: warning
+      icon: alert
+      size: s
+  ```
+
+  Supported badge properties: `text`, `variant` (`primary`, `success`, `danger`, `warning`, `info`, `light`, `dark`, `ghost`, `contrast`), `size` (`xs`–`3xl`), `corners` (`round`, `square`, `pill`), `icon`, `iconAlign`, `link`, `target`.
+</ParamField>
+
+<ParamField path="nav.mode" type="string">
+  **Retype Pro only.** Set to `stack` to convert the folder containing this page to a stacked navigation layout.
+
+  ```yml
+  nav:
+    mode: stack
+  ```
+</ParamField>
+
+---
+
+## nextprev
+
+**Retype Pro only.**
+
+<ParamField path="nextprev.mode" type="string" default="show">
+  Controls the display of Next/Previous navigation buttons at the bottom of this page.
+
+  | Option | Description |
+  | --- | --- |
+  | `show` | Show buttons and include page in sequence |
+  | `hide` | Hide buttons but keep page in sequence |
+  | `exclude` | Hide buttons and exclude page from sequence |
+
+  ```yml
+  nextprev:
+    mode: exclude
+  ```
+</ParamField>
+
+---
+
+## permalink
+
+<ParamField path="permalink" type="string">
+  A custom URL path for this page, overriding the path derived from the file location. Useful when migrating from another platform.
+
+  ```yml
+  ---
+  permalink: /tutorial/publish-to-github-pages/
+  ---
+  ```
+
+  When set on a folder's `index.md`, `readme.md`, or `index.yml`, it becomes the base permalink for all pages in that folder.
+</ParamField>
+
+---
+
+## redirect
+
+<ParamField path="redirect" type="string">
+  Redirect requests for this page to another location (internal path or external URL).
+
+  ```yml
+  ---
+  redirect: getting-started.md
+  ---
+  ```
+
+  Retype also scans the project and replaces any links pointing to the old page with the redirect target.
+</ParamField>
+
+---
+
+## target
+
+<ParamField path="target" type="string">
+  Controls how navigation links to this page behave when clicked.
+
+  ```yml
+  target: blank  # opens in a new tab
+  ```
+
+  Retype automatically transforms `blank` → `_blank`, `self` → `_self`, etc.
+</ParamField>
+
+---
+
+## image
+
+<ParamField path="image" type="string">
+  Custom feature image for page summaries (used in blog listings, social cards, etc.). Accepts a local path or external URL.
+
+  ```yml
+  image: ../static/feature-image1.jpg
+  image: https://example.com/feature.jpg
+  ```
+
+  By default, Retype uses the first image found on the page.
+</ParamField>
+
+---
+
+## breadcrumb
+
+<ParamField path="breadcrumb" type="boolean" default="true">
+  **Retype Pro only.** Set to `false` to hide the breadcrumb navigation on this page.
+
+  ```yml
+  breadcrumb: false
+  ```
+</ParamField>
+
+---
+
+## expanded
+
+<ParamField path="expanded" type="boolean" default="false">
+  Expand this folder node in the tree navigation on initial page load. Only applicable when set in a folder's `index.yml` or default page.
+
+  ```yml
+  expanded: true
+  ```
+</ParamField>
+
+---
+
+## templating
+
+<ParamField path="templating" type="boolean" default="true">
+  Disable the Retype content templating engine on this specific page.
+
+  ```yml
+  templating: false
+  ```
+</ParamField>

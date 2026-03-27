@@ -1,0 +1,284 @@
+---
+title: Layout components
+description: Arrange content with columns, tabs, panels, cards, and containers. All layout components use Retype Flavored Markdown fence syntax.
+---
+
+Retype provides a set of layout components for structuring page content into columns, tabs, accordions, and cards. All are defined inline in Markdown using fence-style syntax.
+
+## Columns
+
+The Column component creates side-by-side equal-width columns using the `|||` fence syntax. Each column requires a title.
+
+```md
+||| Column 1
+Content for the first column.
+||| Column 2
+Content for the second column.
+||| Column 3
+Content for the third column.
+|||
+```
+
+<Note>
+A title is required for each column. Separate the title from `|||` with one space: `||| Column 1`.
+</Note>
+
+Any number of columns can be stacked. All columns share equal width — variable-width columns are not supported.
+
+### Code column
+
+When a column contains only a fenced code block, it renders as a special code column layout. This is useful for side-by-side source/demo examples.
+
+````md
+||| Demo
+[!button My Button](button.md)
+||| Source
+```md
+[!button My Button](button.md)
+```
+|||
+````
+
+### Custom column titles
+
+Column titles support Markdown formatting, including emoji shortcodes and Octicons.
+
+```md
+||| Title with emoji :thumbsup:
+Content here.
+||| Title with icon :icon-check-circle:
+Content here.
+|||
+```
+
+## Tabs
+
+The Tab component groups content into a tabbed interface using the `+++` fence syntax.
+
+```md
++++ Tab 1
+This is the first tab.
++++ Tab 2
+This is the second tab.
++++ Tab 3
+Wow! Yet another tab.
++++
+```
+
+<Note>
+The tab title must be separated from `+++` by one space. `+++ Tab 1` works; `+++Tab 1` does not.
+</Note>
+
+### Anchors
+
+Each tab generates an anchor. You can link directly to a tab by passing the anchor in the URL, and the page will scroll to and activate that tab on load.
+
+```md
+[Link to Tab 3](#tab-3)
+```
+
+### Custom attributes
+
+Apply a custom `id` or CSS `class` to a tab using the `{#id .class}` syntax.
+
+```md
++++ Tab 1 {#getting-started .highlight}
+This tab has a custom id.
++++ Tab 2
+This is another tab.
++++
+```
+
+Linking to the custom id activates the tab: `[Go to getting started](#getting-started)`
+
+## Panels
+
+The Panel component creates collapsible accordion sections using the `===` fence syntax.
+
+```md
+=== My Panel
+This panel is expanded by default.
+===
+```
+
+<Note>
+The title must be separated from `===` by one space. `=== My Panel` works; `===My Panel` does not.
+</Note>
+
+### Collapsed panels
+
+Use `==-` to render a panel in its **collapsed** state by default.
+
+```md
+==- My Panel
+This panel is collapsed by default.
+===
+```
+
+The closing delimiter can also be `==-` — both opening-only and both-side `==-` configurations work.
+
+### Stacking panels
+
+Stack multiple panels by repeating the panel syntax. Individual panels in a stack can have different expanded/collapsed states.
+
+```md
+=== Expanded Panel
+Panels are expanded by default.
+
+==- Collapsed Panel
+This panel starts collapsed.
+
+===
+```
+
+### Accordion
+
+A stack of collapsed panels forms an accordion — useful for FAQs or progressive disclosure.
+
+```md
+==- What is Retype?
+Retype is a static site generator for Markdown-based documentation.
+
+==- How do I get started?
+Install the Retype CLI and run `retype init` in your project directory.
+
+==- Where can I deploy my Retype site?
+Retype sites work on GitHub Pages, Netlify, Vercel, or any static hosting service.
+===
+```
+
+### Inner content
+
+Panels can contain any Markdown content or other Retype components, including code blocks and tables.
+
+<Warning>
+Panels cannot be nested inside each other — only stacked. All other components can be nested inside a panel.
+</Warning>
+
+### Custom attributes
+
+Apply a custom `id` or CSS `class` using the `{#id .class}` syntax.
+
+```md
+=== My Panel {#features-panel .highlight}
+This panel has a custom id and class.
+===
+```
+
+Linking to the custom id scrolls to and expands the panel: `[Go to features](#features-panel)`
+
+## Card
+
+The Card component renders a linked preview for another page or external URL. For local pages, Retype automatically resolves the title, description, image, and other metadata.
+
+```md
+[!card](path/to/page.md)
+```
+
+### Layouts
+
+Cards support three layout modes:
+
+```md
+[!card](path/to/page.md)                    <!--  Horizontal (default)  -->
+[!card vert](path/to/page.md)               <!--  Vertical              -->
+[!card compact](path/to/page.md)            <!--  Compact               -->
+[!card layout="vertical"](path/to/page.md)  <!--  Explicit attribute    -->
+```
+
+| Layout | Description |
+| --- | --- |
+| Horizontal (default) | Image beside content. Best for a single prominent card. |
+| Vertical (`vert`) | Image above content. Consecutive vertical cards form a responsive group. |
+| Compact | Small inline card. Does not render image, kicker, or footer. |
+
+### Property overrides
+
+Any combination of card fields can be overridden. Unoverridden fields fall back to page metadata.
+
+| Property | Description |
+| --- | --- |
+| `layout` | `vert`, `vertical`, or `compact`. Default is horizontal. |
+| `title` | Overrides the card title. |
+| `text` | Overrides the description. |
+| `icon` | Overrides the icon (compact cards only). |
+| `image` | Overrides the image (horizontal and vertical only). |
+| `kicker` | Overrides the kicker above the title. |
+| `footer` | Overrides the footer below the content. |
+
+```md
+[!card layout="vert" title="Custom title"](path/to/page.md)
+[!card title="Retype" text="Visit retype.com." icon=":smile:" layout="compact"](https://retype.com/)
+```
+
+### List pair cards
+
+Create compact cards from a Markdown list of wikilinks with nested description items.
+
+```md
+- [[Getting Started]]
+  - Get up and running with Retype in minutes.
+- [[Installation]]
+  - Install the Retype CLI with npm, yarn, or dotnet.
+```
+
+## Container
+
+The Container component wraps any content in a `<div>` element, enabling custom CSS styling.
+
+```md
+:::
+This text is inside a container.
+:::
+```
+
+By default the container has no visible effect. Its power comes from applying a custom CSS class.
+
+### Custom CSS class
+
+Append a class name directly to the opening `:::` to apply it to the container.
+
+```md
+:::content-center
+[!button My Button]
+:::
+
+:::text-center
+This text will be centered.
+:::
+```
+
+Retype includes utility classes such as `content-center` and `text-center`. You can also define your own classes.
+
+### Defining custom styles
+
+Add an inline `<style>` block on the page, or place global styles in `/_includes/head.html`.
+
+```md
+<style>
+  .callout-box {
+    border: 1px solid #1956AF;
+    border-radius: 10px;
+    padding: 20px;
+  }
+</style>
+:::callout-box
+This container uses the `.callout-box` class.
+:::
+```
+
+For styles needed across multiple pages, move the CSS to `/_includes/head.html` or a linked `.css` file referenced from that file.
+
+### Custom attributes
+
+Apply a custom `id` or CSS `class` using the `{#id .class}` syntax.
+
+```md
+::: {#my-container .custom-style}
+This container has a custom id and class.
+:::
+```
+
+<Warning>
+Retype does not validate custom HTML added to `_includes/head.html`. Ensure it is correct and does not break other page elements.
+</Warning>

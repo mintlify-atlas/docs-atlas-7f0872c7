@@ -1,0 +1,166 @@
+---
+title: Themes
+description: Customize the visual appearance of your Retype site using theme variables for colors, typography, and dark mode.
+---
+
+Retype's theme system lets you customize the visual appearance of your site by overriding built-in theme variables. You can adjust colors, typography, spacing, and other design elements to match your brand.
+
+<Warning>
+Theme customization requires a [Retype Pro](https://retype.com/pro/) license. To try it without a license, add the following to your `retype.yml`:
+
+```yaml
+start:
+  pro: true
+```
+</Warning>
+
+## Quick start
+
+The fastest way to customize your site is to set a `base-color` in your `retype.yml`:
+
+```yaml retype.yml
+theme:
+  base:
+    base-color: "#8839ef"
+```
+
+Retype derives many secondary colors from this single value, so changing `base-color` alone produces a cohesive brand update across the entire site.
+
+## Configuration structure
+
+The `theme` key in `retype.yml` supports two sections: `base` (light mode) and `dark` (dark mode).
+
+### `base` theme
+
+The `base` theme controls the light mode appearance and serves as the foundation for your site's visual style:
+
+```yaml retype.yml
+theme:
+  base:
+    base-color: "#8839ef"
+    base-bg: "#eff1f5"
+    base-link-weight: 500
+    image-rounded: 0.75rem
+```
+
+### `dark` theme
+
+The `dark` theme applies only when the visitor switches to dark mode. Variables defined here override the `base` theme variables:
+
+```yaml retype.yml
+theme:
+  dark:
+    base-color: "#ca9ee6"
+    base-bg: "#303446"
+```
+
+## Examples
+
+### Brand color
+
+Apply your brand's primary color:
+
+```yaml retype.yml
+theme:
+  base:
+    base-color: "#ff6b35"
+```
+
+### Typography
+
+Adjust link weight, active navigation weight, and heading color:
+
+```yaml retype.yml
+theme:
+  base:
+    base-link-weight: 500
+    nav-item-text-active-weight: 700
+    heading-text: "#1a202c"
+```
+
+### Dark mode
+
+Fine-tune the dark mode experience:
+
+```yaml retype.yml
+theme:
+  dark:
+    base-bg: "#0a0e1a"
+    sidebar-left-bg: "#1a1f2e"
+    base-text: "#e2e8f0"
+    heading-text: "#ffffff"
+    base-border: "#2d3748"
+```
+
+### Component colors
+
+Override semantic status colors and image rounding:
+
+```yaml retype.yml
+theme:
+  base:
+    image-rounded: 0.75rem
+    primary: "#8caaee"
+    success: "#a6d189"
+    danger: "#e78284"
+    warning: "#e5c890"
+```
+
+### Light and dark together
+
+Configure both modes in a single file:
+
+```yaml retype.yml
+theme:
+  base:
+    base-color: "#8839ef"
+    base-text: "#4c4f69"
+    base-bg: "#ffffff"
+  dark:
+    base-color: "#ca9ee6"
+    base-bg: "#303446"
+```
+
+## Best practices
+
+**Start with `base-color`.** Make a single brand color change first and review the result before expanding into full theme customization.
+
+**Prioritize contrast.** Text and background colors must have sufficient contrast for readability and accessibility. Use an online contrast checker to validate against WCAG standards.
+
+<Tip>
+Test your color palette at [webaim.org/resources/contrastchecker](https://webaim.org/resources/contrastchecker/) before publishing.
+</Tip>
+
+**Test both modes.** A color that looks good in light mode may appear washed out or harsh in dark mode. Always review both states.
+
+**Use semantic variables.** Prefer referencing existing variables over hardcoding hex values:
+
+```yaml
+theme:
+  base:
+    nav-item-text-active: "var(--base-500)"
+```
+
+This keeps your theme consistent and easier to maintain as your site grows.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Theme not applied">
+    - Confirm you have a valid Retype Pro license or have set `start.pro: true` in `retype.yml`.
+    - Check the YAML syntax in your `retype.yml` file — indentation errors are a common cause.
+    - Verify that theme variable names match exactly as documented.
+  </Accordion>
+
+  <Accordion title="Dark mode looks wrong">
+    - `dark` theme variables only apply when the visitor is in dark mode. Use the theme toggle on your site to test.
+    - Some variables need to be set in both `base` and `dark` to maintain proper contrast.
+    - Make sure you haven't accidentally placed `dark` variables inside the `base` block.
+  </Accordion>
+
+  <Accordion title="Variable name errors">
+    - All variable names use `kebab-case` (hyphens, not underscores).
+    - Variable names are case-sensitive.
+    - Do not include the `--` CSS custom property prefix in your `retype.yml` configuration.
+  </Accordion>
+</AccordionGroup>

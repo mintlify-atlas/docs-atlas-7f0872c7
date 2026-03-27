@@ -1,0 +1,112 @@
+---
+title: Docker
+description: Build and serve your Retype documentation site inside a Docker container for portable, self-hosted deployments.
+---
+
+Running Retype inside a Docker container gives you a reproducible build environment and makes it straightforward to deploy to any container-based hosting platform.
+
+Advantages of using Docker include:
+
+- **Portability** — move between hosting environments without reconfiguring build tools
+- **Scalability** — deploy to Heroku, Amazon ECS, Google Cloud Run, or any OCI-compatible runtime
+- **Security** — isolated build environment with no host dependencies
+
+## Step 1: Add a Dockerfile
+
+Create a `Dockerfile` at the root of your project. The following example uses a multi-stage build: the first stage installs Retype and builds the site, and the second stage produces a minimal Apache HTTP server image containing only the built output.
+
+```dockerfile Dockerfile
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS builder
+WORKDIR /build
+COPY . /build
+RUN dotnet tool install retypeapp --tool-path /bin
+RUN retype build --output .docker-build/
+
+FROM httpd:latest
+COPY --from=builder /build/.docker-build/ /usr/local/apache2/htdocs/
+```
+
+The multi-stage build ensures that the final image contains only the static HTML/CSS/JS output and the Apache server — the .NET SDK and Retype tooling are discarded.
+
+<Note>
+Most cloud platforms (Heroku, ECS, Cloud Run) can build the Docker image on their own from the `Dockerfile`. Consult your platform's documentation for details — you may not need to build or push the image manually.
+</Note>
+
+## Step 2: Build the image
+
+Build the image locally using the Docker CLI:
+
+```bash
+docker build -t myorg/myapplication:latest .
+```
+
+To verify the build succeeded, run the container locally and open your browser:
+
+```bash
+docker run --rm -p 8080:80 myorg/myapplication:latest
+```
+
+The site will be available at [http://localhost:8080](http://localhost:8080).
+
+## Step 3: Publish the image
+
+After a successful local build, push the image to a container registry. [Docker Hub](https://hub.docker.com/) provides free public repositories:
+
+```bash
+docker push myorg/myapplication:latest
+```
+
+See the [Docker Hub documentation](https://docs.docker.com/docker-hub/) for instructions on creating a repository and authenticating.
+
+<Tip>
+For private registries or cloud-native registries (Amazon ECR, Google Artifact Registry, GitHub Container Registry), consult the relevant platform documentation for the correct `docker login` and `docker push` commands.
+</Tip>
+
+## Using Docker in CI/CD
+
+You can integrate the Docker build into a GitHub Actions workflow to automatically build and publish the image on every push:
+
+```yaml .github/workflows/docker-publish.yml
+name: Build and publish Docker image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: myorg/myapplication:latest
+```
+
+Store your Docker Hub credentials as [encrypted secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) in your repository settings (`DOCKER_USERNAME` and `DOCKER_PASSWORD`).
+
+## Other hosting options
+
+<CardGroup cols={2}>
+  <Card title="GitHub Pages" icon="github" href="/hosting/github-pages">
+    Deploy to GitHub Pages for free using the Retype Build Action.
+  </Card>
+  <Card title="Netlify" icon="globe" href="/hosting/netlify">
+    Deploy to Netlify with automatic builds from your Git repository.
+  </Card>
+  <Card title="Cloudflare Pages" icon="cloud" href="/hosting/cloudflare">
+    Host on Cloudflare Pages with global CDN and DDoS protection.
+  </Card>
+</CardGroup>

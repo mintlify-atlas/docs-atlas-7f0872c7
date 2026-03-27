@@ -1,0 +1,194 @@
+---
+title: Blogging
+description: Add a blog to your Retype site with automatic post listing, pagination, RSS feed, and author metadata.
+---
+
+Adding a blog to your Retype site takes only a new folder and a Markdown file. Retype handles the post index, pagination, RSS feed, and navigation automatically.
+
+## Setup
+
+<Steps>
+  <Step title="Create the blog folder">
+    Create a `/blog` folder in the root of your project.
+  </Step>
+  <Step title="Add a blog post">
+    Create a new `.md` file. Use the date-prefixed naming convention to set the publish date automatically:
+
+    ```
+    /blog/2025-11-15-hello-world.md
+    ```
+
+    Alternatively, give the file any name and set the date in the frontmatter:
+
+    ```md /blog/hello-world.md
+    ---
+    date: 2025-11-15
+    ---
+    ```
+  </Step>
+  <Step title="Write your post">
+    Add a title and content:
+
+    ```md
+    # Hello World
+
+    This is my first blog post built with Retype.
+    ```
+  </Step>
+  <Step title="Run Retype">
+    Run `retype start`. Your blog is live at `/blog/`.
+  </Step>
+</Steps>
+
+Retype automatically generates:
+
+- A summary index page at `/blog/`
+- An RSS feed
+- "Newer" and "Older" navigation buttons on each post
+- Date-ordered listing, newest first
+
+<Note>
+The date in the filename sets the publish date. You can override it at any time using the `date` frontmatter property.
+</Note>
+
+## Blog summary page
+
+Add an `index.md` (or `default.md` or `readme.md`) inside the `/blog/` folder to customize the summary page heading or add introductory content:
+
+```md /blog/index.md
+# Company Blog
+
+Product announcements, engineering updates, and release notes.
+```
+
+## Frontmatter
+
+Blog posts support all standard Retype [page configuration](https://retype.com/configuration/page/) options. The following properties are especially useful for blog posts:
+
+```yaml
+---
+author: Jane Smith
+category: [announcements]
+tags: [release, update]
+date: 2025-11-15
+---
+```
+
+### `author`
+
+Set one or more authors for the post. Accepts a simple name string or a full author object:
+
+<CodeGroup>
+
+```yaml Single author
+---
+author: Jane Smith
+---
+```
+
+```yaml Multiple authors
+---
+authors:
+  - name: Jane Smith
+    email: jane@example.com
+    link: https://github.com/janesmith
+  - Bob Wilson
+---
+```
+
+</CodeGroup>
+
+### `date`
+
+A publish date in `YYYY-MM-DD` format. Retype displays it at the top of the post and uses it for ordering. If no `date` is set, Retype uses the date from the filename.
+
+```yaml
+---
+date: 2025-11-15
+---
+```
+
+To change how the date is displayed to visitors, configure [`locale.dateFormat`](https://retype.com/configuration/project/#locale-dateformat) in your `retype.yml`.
+
+### `category`
+
+Assign one or more categories. Retype automatically generates category summary pages at `/categories/`:
+
+```yaml
+---
+category: [announcements, engineering]
+---
+```
+
+## Project configuration
+
+Control blog behavior in your `retype.yml` under the `blog` key:
+
+```yaml retype.yml
+blog:
+  pageSize: 5
+  maxResults: 100
+  title: News & Updates
+  base: news
+```
+
+### `base`
+
+The URL path segment for the blog. Default is `"blog"`.
+
+```yaml
+blog:
+  base: news
+```
+
+Setting `base: news` generates the summary page at `/news/` instead of `/blog/`. Your source files still live in the `/blog/` folder.
+
+### `layout`
+
+The default layout for all blog posts. Default is `blog`. Set to `page` to include the left sidebar tree navigation and the right-side table of contents:
+
+```yaml
+blog:
+  layout: page
+```
+
+### `pageSize`
+
+The number of posts shown per summary page. Default is `10`. When the total number of posts exceeds this value, Retype generates paginated summary pages automatically:
+
+```yaml
+blog:
+  pageSize: 5
+```
+
+### `maxResults`
+
+The maximum total number of posts included across all paginated summary pages. Default is all posts. Posts beyond the limit are still accessible by direct URL:
+
+```yaml
+blog:
+  maxResults: 100
+```
+
+### `title`
+
+A custom heading for the blog summary page:
+
+```yaml
+blog:
+  title: News & Updates
+```
+
+### `rss`
+
+Customize the generated RSS feed metadata:
+
+```yaml retype.yml
+blog:
+  rss:
+    title: News & Updates
+    description: Product announcements, release notes, and updates
+    copyright: "Copyright 2025. All rights reserved."
+```
+
+See the [`blog.rss`](https://retype.com/configuration/project/#blog-rss) documentation for the full list of RSS settings.

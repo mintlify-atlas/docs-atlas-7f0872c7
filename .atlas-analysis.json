@@ -1,26 +1,11 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "name": "Retype",
+  "projectType": "cli-tool",
+  "projectName": "Retype",
+  "projectDescription": "An ultra-high-performance static site generator that transforms Markdown files into a complete documentation website with no coding required.",
   "theme": "palm",
-  "colors": {
-    "primary": "#141414"
-  },
-  "favicon": "https://icons.duckduckgo.com/ip3/retype.com.ico",
-  "logo": {
-    "light": "https://media.brand.dev/36758cca-472c-47ed-b865-1cd347d80a60.png",
-    "dark": "https://media.brand.dev/36758cca-472c-47ed-b865-1cd347d80a60.png"
-  },
-  "navbar": {
-    "primary": {
-      "type": "github",
-      "href": "https://github.com/retypeapp/retype"
-    }
-  },
-  "footer": {
-    "socials": {
-      "github": "https://github.com/retypeapp/retype"
-    }
-  },
+  "primaryColor": "#141414",
+  "lightColor": null,
+  "darkColor": null,
   "navigation": {
     "tabs": [
       {
@@ -90,5 +75,28 @@
         ]
       }
     ]
-  }
+  },
+  "keyFeatures": [
+    "Zero-code static site generation from Markdown files",
+    "Lightning-fast incremental builds with page dependency graph",
+    "Live reload development server with automatic browser refresh",
+    "Rich component library (tabs, callouts, cards, code blocks, etc.)",
+    "Flexible hosting — GitHub Pages, Netlify, Cloudflare, Docker, and more",
+    "Project and page-level configuration via retype.yml",
+    "Built-in search, sitemap, RSS feed, and Open Graph support",
+    "Retype Pro with advanced features (backlinks, private pages, themes)"
+  ],
+  "publicApiSurface": [
+    "retype start",
+    "retype build",
+    "retype init",
+    "retype serve",
+    "retype clean",
+    "retype stop",
+    "retype wallet",
+    "retype build --override",
+    "retype.yml (project configuration)",
+    "Page front matter (label, icon, order, tags, visibility, etc.)",
+    "RETYPE_KEY environment variable"
+  ]
 }

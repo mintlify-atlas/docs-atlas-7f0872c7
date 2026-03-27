@@ -1,0 +1,196 @@
+---
+title: Media components
+description: Embed images, YouTube videos, and arbitrary iframe content in your Retype documentation pages.
+---
+
+Retype extends standard Markdown image syntax and adds dedicated components for embedding videos and iframes.
+
+## Images
+
+The standard Markdown image syntax is used to embed images. Images can reference files within the project or external URLs.
+
+```md
+![Alt text](/static/sample.jpg)
+```
+
+### Caption
+
+The text between `[]` is used as an optional caption displayed below the image.
+
+```md
+![This is an optional caption](/static/sample.jpg)
+```
+
+### Title tooltip
+
+An optional `title` attribute can be added after the URL, in quotes. Most browsers display this as a tooltip on hover.
+
+```md
+![Caption text](/static/sample.jpg "This is an optional title")
+```
+
+### Linked images
+
+Wrap the image in a standard Markdown link to make it clickable.
+
+```md
+[![](/static/sample.jpg)](https://retype.com)
+[![](/static/sample.jpg)](/guides/getting-started.md)
+```
+
+### Dimensions
+
+Control image size using the pipe `|` separator after the alt text.
+
+```md
+![Sample Image|300x200](/static/sample.jpg)  <!-- width and height -->
+![Sample Image|300](/static/sample.jpg)       <!-- width only (height scales proportionally) -->
+```
+
+Dimension values are in pixels.
+
+### Custom HTML attributes
+
+Append a `{...}` block after the image to set any HTML attribute.
+
+```md
+![](/static/sample.jpg){#custom-id}
+![](/static/sample.jpg){.rounded-lg}
+![](/static/sample.jpg){width="300" height="200"}
+![](/static/sample.jpg){.rounded-lg width="300"}
+![](/static/sample.jpg){data-location="Korea"}
+```
+
+Multiple attributes can be combined in a single block:
+
+```md
+![](/static/sample.jpg){.rounded-lg width="300" data-location="Korea"}
+```
+
+### Alignment
+
+When an image is placed on its own line, Retype provides alignment options using `-` prefix/suffix characters.
+
+| Position | Markdown | Description |
+| --- | --- | --- |
+| `center` (default) | `![Caption](photo.jpg)` | Center aligned |
+| `left` | `-![Caption](photo.jpg)` | Float left |
+| `leftplus` | `--![Caption](photo.jpg)` | Float left with negative left offset |
+| `right` | `![Caption](photo.jpg)-` | Float right |
+| `rightplus` | `![Caption](photo.jpg)--` | Float right with negative right offset |
+| `centerplus` | `--![Caption](photo.jpg)--` | Center with negative offset both sides |
+
+<Note>
+Alignment options only apply to images placed on their own line. Inline images (on the same line as other text) are always treated as inline elements.
+
+The `plus` alignment variants only apply on pages with `layout: central` or `layout: blog`. On other layouts they fall back to their non-plus equivalents.
+</Note>
+
+## YouTube
+
+Embed a YouTube video by placing a YouTube URL on its own line. Retype automatically converts it into a responsive embedded player.
+
+```md
+https://www.youtube.com/watch?v=dQw4w9WgXcQ
+```
+
+### Supported URL formats
+
+Retype recognizes the following YouTube URL formats:
+
+```md
+https://www.youtube.com/watch?v=VIDEO_ID
+https://youtu.be/VIDEO_ID
+https://www.youtube.com/embed/VIDEO_ID
+```
+
+### Player parameters
+
+Customize the embedded player by appending standard YouTube query parameters to the URL.
+
+| Parameter | Example | Description |
+| --- | --- | --- |
+| `autoplay` | `autoplay=1` | Start playback automatically |
+| `loop` | `loop=1` | Loop the video |
+| `controls` | `controls=0` | Hide player controls |
+| `mute` | `mute=1` | Start with audio muted |
+| `start` | `start=30` | Start at 30 seconds |
+| `end` | `end=60` | Stop at 60 seconds |
+
+```md
+https://www.youtube.com/watch?v=dQw4w9WgXcQ&start=30&end=60
+```
+
+### Timestamps
+
+Link to a specific time using the `t` parameter or the `#t=` hash format.
+
+```md
+https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=30s
+https://youtu.be/dQw4w9WgXcQ?t=45
+```
+
+For all available parameters, refer to the [YouTube Player Parameters](https://developers.google.com/youtube/player_parameters#Parameters) documentation.
+
+## Embed
+
+The `[!embed]` component renders an `<iframe>` (or similar HTML element) for any embeddable URL. It provides more control than the auto-YouTube embed.
+
+```md
+[!embed](https://www.youtube.com/embed/C0DPdy98e4c)
+```
+
+### AllowFullScreen
+
+Full-screen support is enabled by default. Set `allowFullScreen="false"` to disable it.
+
+```md
+[!embed allowFullScreen="false"](https://www.youtube.com/embed/C0DPdy98e4c)
+```
+
+### Aspect ratio
+
+Set the aspect ratio of the embedded area with the `aspect` attribute.
+
+```md
+[!embed aspect="4:3"](https://www.youtube.com/embed/C0DPdy98e4c)
+```
+
+| Value | Description |
+| --- | --- |
+| `1:1` | Square |
+| `4:3` | Standard |
+| `16:9` (default) | Widescreen |
+| `21:9` | Ultrawide |
+
+### Element type
+
+Control which HTML element wraps the embedded content with the `el` attribute.
+
+```md
+[!embed el="embed"](https://www.youtube.com/embed/C0DPdy98e4c)
+```
+
+| Value | Description |
+| --- | --- |
+| `iframe` (default) | Standard iframe |
+| `embed` | HTML `<embed>` element |
+| `video` | HTML `<video>` element |
+| `object` | HTML `<object>` element |
+
+### Dimensions
+
+Set explicit pixel dimensions with `width` and `height`.
+
+```md
+[!embed width="300"](https://www.youtube.com/embed/C0DPdy98e4c)
+[!embed height="120"](https://www.youtube.com/embed/C0DPdy98e4c)
+```
+
+### Caption
+
+Add a caption below the embedded content with the `text` attribute.
+
+```md
+[!embed text="My Video Caption"](https://www.youtube.com/embed/C0DPdy98e4c)
+```

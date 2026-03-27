@@ -1,0 +1,164 @@
+---
+title: Folder configuration
+description: Reference for folder-level configuration in Retype using index.yml files, including label, icon, order, visibility, and more.
+---
+
+A folder is configured by placing an **index.yml** file inside the folder. This file uses the same properties as [page configuration](/configuration/page), allowing you to set navigation labels, icons, ordering, visibility, and other options for the entire folder.
+
+<Note>
+Folders support the same properties as pages, although properties that are not applicable in a folder context (such as `meta.description`) are ignored.
+</Note>
+
+## Sample index.yml
+
+```yml index.yml
+label: Guides
+icon: book
+order: 100
+expanded: true
+```
+
+---
+
+## label
+
+<ParamField path="label" type="string">
+  Changes the label used for this folder's left navigation tree node.
+
+  ```yml index.yml
+  label: Custom label
+  ```
+</ParamField>
+
+---
+
+## icon
+
+<ParamField path="icon" type="string">
+  Sets a custom icon for this folder's navigation node. Accepts an Octicon name, emoji shortcode, inline `<svg>`, or a path to an image file.
+
+  ```yml index.yml
+  icon: gear
+  ```
+</ParamField>
+
+---
+
+## order
+
+<ParamField path="order" type="string | number">
+  Controls the position of this folder in the left sidebar navigation. Folders are always pinned to the top of their order group.
+
+  ```yml index.yml
+  order: 1000   # move to top of navigation
+  ```
+
+  ```yml index.yml
+  order: -1000  # move to bottom of navigation
+  ```
+
+  Uses the same ordering logic as [page order](/configuration/page#order).
+</ParamField>
+
+---
+
+## expanded
+
+<ParamField path="expanded" type="boolean" default="false">
+  Expand this folder node in the tree navigation on initial page load.
+
+  ```yml index.yml
+  expanded: true
+  ```
+</ParamField>
+
+---
+
+## visibility
+
+<ParamField path="visibility" type="string" default="public">
+  Hide or password-protect the entire folder.
+
+  ```yml index.yml
+  visibility: hidden
+  ```
+
+  ```yml index.yml
+  visibility: protected
+  ```
+
+  ```yml index.yml
+  visibility: private
+  ```
+
+  | Mode | Description |
+  | --- | --- |
+  | `public` | Visible in navigation and search (default) |
+  | `hidden` | Excluded from navigation and search; accessible by direct URL |
+  | `protected` | Shown in navigation; requires a password to view content |
+  | `private` | Hidden from navigation; requires a password to access |
+
+  <Tip>Alternatively, prefix the folder name with an underscore (`_guides`) to instruct Retype to ignore it entirely during the build.</Tip>
+
+  For `protected` and `private` folders, set the password with the `--password` CLI flag or the [`RETYPE_PASSWORD`](/configuration/envvars#retype_password) environment variable.
+</ParamField>
+
+---
+
+## permalink
+
+<ParamField path="permalink" type="string">
+  Sets a custom base URL path for all pages within this folder, overriding the default path derived from the folder's location.
+
+  ```yml index.yml
+  permalink: /tutorials
+  ```
+
+  With this configuration, a page at `/guides/installation.md` would be served from `/tutorials/installation/`. See [page permalink](/configuration/page#permalink) for full details.
+</ParamField>
+
+---
+
+## backlinks
+
+<ParamField path="backlinks.enabled" type="boolean">
+  **Retype Pro only.** Enable or disable the backlinks section for all pages within this folder. Child pages inherit this setting unless they override it in their own front matter.
+
+  ```yml index.yml
+  backlinks:
+    enabled: false
+  ```
+</ParamField>
+
+---
+
+## nextprev
+
+<ParamField path="nextprev.mode" type="string">
+  **Retype Pro only.** Controls Next/Previous navigation buttons for all pages in this folder.
+
+  | Option | Description |
+  | --- | --- |
+  | `show` | Show buttons and include pages in sequence (default) |
+  | `hide` | Hide buttons but keep pages in sequence |
+  | `exclude` | Hide buttons and exclude pages from sequence |
+
+  ```yml index.yml
+  nextprev:
+    mode: hide
+  ```
+
+  Page-level `nextprev.mode` takes precedence over the folder-level setting.
+</ParamField>
+
+---
+
+## Configuration precedence
+
+Folder, page, and project configuration interact with the following precedence (highest to lowest):
+
+1. **Page** front matter or paired `.yml` file
+2. **Folder** `index.yml`
+3. **Project** `retype.yml`
+
+This means a page can always override its folder's settings, and a folder can always override the project-wide defaults.

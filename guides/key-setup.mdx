@@ -1,0 +1,102 @@
+---
+title: "Key setup"
+description: "Add your Retype Pro or Enterprise license key to activate Pro features locally, in CI, or on your hosting platform."
+---
+
+After purchasing Retype Pro or Enterprise, your key is emailed to you. There are three ways to activate the key depending on your environment.
+
+## Option 1: Wallet (local development)
+
+Store the key in an encrypted local wallet so it is automatically used for every future build on your machine.
+
+```bash
+retype wallet --add <key>
+```
+
+Replace `<key>` with your actual Retype key. Once added, you do not need to pass the key again — Retype reads it from the wallet automatically.
+
+Additional wallet commands:
+
+```bash
+retype wallet --list    # List stored keys
+retype wallet --remove <key>  # Remove a specific key
+retype wallet --clear   # Clear all keys from the wallet
+```
+
+<Note>
+  The wallet stores keys in an encrypted file called `license.dat` on your local machine. Keys added to the wallet are not committed to your repository.
+</Note>
+
+## Option 2: `--key` flag (per-build)
+
+Pass the key directly as a CLI option. The key is **not** stored in the wallet and must be passed with every invocation.
+
+<CodeGroup>
+
+```bash retype build
+retype build --key <key>
+```
+
+```bash retype start
+retype start --key <key>
+```
+
+</CodeGroup>
+
+This approach is useful for one-off builds or scripted environments where you manage secrets externally.
+
+## Option 3: `RETYPE_KEY` environment variable (CI/hosting)
+
+Set `RETYPE_KEY` as an environment variable. This is the recommended approach for hosted deployments and CI pipelines because the key never needs to be stored in your repository.
+
+### GitHub Actions
+
+<Steps>
+  <Step title="Add the secret to your repository">
+    Navigate to your repository's secret settings:
+
+    ```
+    https://github.com/<your-organization>/<your-project>/settings/secrets/actions
+    ```
+
+    Click **New repository secret**, set the name to `RETYPE_KEY`, and paste your key as the value.
+  </Step>
+  <Step title="Reference the secret in your workflow">
+    Pass the secret to the Retype build action in your `.github/workflows/retype-action.yml`:
+
+    ```yaml .github/workflows/retype-action.yml
+    - uses: retypeapp/action-build@latest
+      env:
+        RETYPE_KEY: ${{ secrets.RETYPE_KEY }}
+    ```
+  </Step>
+  <Step title="Commit and push">
+    Push your updated workflow file. The next build will automatically use your Pro key.
+  </Step>
+</Steps>
+
+### Other platforms
+
+For Netlify, Cloudflare Pages, or any other hosting service, add `RETYPE_KEY` as an environment variable in the platform's build settings. Retype automatically reads the variable at build time.
+
+## Verify the key is active
+
+Run a build with verbose output to confirm your key is recognized:
+
+```bash
+retype build --verbose
+```
+
+If the key is active, the build output will reflect Pro features being enabled (e.g., no page limit, no "Powered by Retype" branding). If the key is not found or invalid, Retype falls back to Free tier behavior.
+
+<Tip>
+  Use `retype wallet --list` to check which keys are currently stored in your local wallet.
+</Tip>
+
+## Summary
+
+| Method | Use case | Key persisted? |
+| --- | --- | --- |
+| `retype wallet --add` | Local development | Yes, in encrypted wallet |
+| `--key` flag | Per-build or scripted | No |
+| `RETYPE_KEY` env var | CI pipelines and hosting | No (managed externally) |

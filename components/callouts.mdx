@@ -1,0 +1,201 @@
+---
+title: Callouts
+description: Highlight important messages using styled alert boxes. Retype supports named variants, collapsible state, GitHub Alert syntax, and custom attributes.
+---
+
+Callouts draw the reader's attention to important information. Wrap any block of Markdown content in `!!!` to create one.
+
+```md
+!!!
+This is a callout.
+!!!
+```
+
+## Title
+
+Add a title by placing text after the opening `!!!`.
+
+```md
+!!! My title
+This is a callout with a title.
+!!!
+```
+
+Titles support basic Markdown syntax and emoji shortcodes.
+
+```md
+!!! :zap: Getting started
+Get up to speed with Retype quickly.
+!!!
+```
+
+## Variants
+
+Specify a variant immediately after `!!!` to change the color and intent of the callout.
+
+```md
+!!!primary Primary
+This is a `primary` callout.
+!!!
+
+!!!warning Warning
+This is a `warning` callout.
+!!!
+
+!!!danger Danger
+This is a `danger` callout.
+!!!
+```
+
+The full set of available variants:
+
+| Variant | Color |
+| --- | --- |
+| `base` | Uses the configured `base-color` |
+| `primary` (default) | Blue |
+| `secondary` | Gray |
+| `success` | Green |
+| `question` | Purple |
+| `tip` | Green |
+| `danger` | Red |
+| `warning` | Yellow |
+| `info` | Light blue |
+| `light` | Light |
+| `dark` | Dark |
+| `ghost` | Light or dark depending on time of day |
+| `contrast` | Dark or light depending on time of day |
+
+### All variants
+
+```md
+!!!base Base
+This is a `base` callout.
+!!!
+
+!!!primary Primary
+This is a `primary` callout.
+!!!
+
+!!!secondary Secondary
+This is a `secondary` callout.
+!!!
+
+!!!success Success
+This is a `success` callout.
+!!!
+
+!!!question Question
+This is a `question` callout.
+!!!
+
+!!!tip Tip
+This is a `tip` callout.
+!!!
+
+!!!danger Danger
+This is a `danger` callout.
+!!!
+
+!!!warning Warning
+This is a `warning` callout.
+!!!
+
+!!!info Info
+This is an `info` callout.
+!!!
+
+!!!light Light
+This is a `light` callout.
+!!!
+
+!!!dark Dark
+This is a `dark` callout.
+!!!
+
+!!!ghost Ghost
+This is a `ghost` callout.
+!!!
+
+!!!contrast Contrast
+This is a `contrast` callout.
+!!!
+```
+
+## Collapsible callouts
+
+Use `!!-` to create a collapsible callout that starts **collapsed**.
+
+```md
+!!- Maintenance window
+Database migrations begin at 10:00 PM UTC.
+!!!
+```
+
+Use `!!+` to create a collapsible callout that starts **expanded**.
+
+```md
+!!+ Release checklist
+Confirm the final changelog and rollback steps before publishing.
+!!!
+```
+
+Combine the collapsible syntax with a variant:
+
+```md
+!!-danger Security incident response
+Rotate exposed credentials immediately and notify the on-call team.
+!!!
+```
+
+## GitHub Alerts
+
+Retype also supports the GitHub [Alert](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts) blockquote syntax.
+
+```md
+> [!NOTE]
+> Useful information that users should know.
+
+> [!TIP]
+> Helpful advice for doing things better or more easily.
+
+> [!IMPORTANT]
+> Key information users need to know to achieve their goal.
+
+> [!WARNING]
+> Urgent info that needs immediate user attention to avoid problems.
+
+> [!CAUTION]
+> Advises about risks or negative outcomes of certain actions.
+```
+
+A custom title can be added using the following syntax:
+
+```md
+> [!NOTE] Custom Title
+> Useful information that users should know.
+```
+
+## Custom attributes
+
+Apply a custom `id` or CSS `class` to a callout using the `{#id .class}` syntax.
+
+```md
+!!!warning Important {#critical-warning .highlight}
+This callout has a custom id and class.
+!!!
+```
+
+## Theme variables
+
+Callout colors can be customized via theme variables in your `retype.yml` file.
+
+```yaml
+theme:
+  base:
+    # Override the primary callout color
+    callout-primary: "#209fb5"
+```
+
+<Tip>
+For the full list of callout theme variables, see the [Theme Variables](/configuration/theme-variables) documentation.
+</Tip>

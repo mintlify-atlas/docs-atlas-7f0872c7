@@ -1,0 +1,102 @@
+---
+title: Cloudflare Pages
+description: Deploy your Retype documentation site to Cloudflare Pages for fast global delivery and built-in DDoS protection.
+---
+
+[Cloudflare Pages](https://pages.cloudflare.com/) is a hosting platform used by millions of websites. It provides a global CDN, DDoS protection, and a generous free tier. This guide walks through connecting your GitHub repository to Cloudflare Pages and deploying your Retype site.
+
+## Prerequisites
+
+- A GitHub repository containing your Retype project source files
+- The Retype Build Action configured to publish built output to a `retype` branch (see the [GitHub Actions guide](/hosting/github-pages))
+- A Cloudflare account (free tier is sufficient)
+
+## Deployment
+
+<Steps>
+  <Step title="Add the Retype Build Action">
+    Before connecting Cloudflare Pages, set up the [Retype GitHub Build Action](/hosting/github-pages#automated-deployment-with-github-actions) in your repository. The action builds your site and pushes the output to a `retype` branch, which Cloudflare Pages will serve.
+
+    <Warning>
+    Complete this step and verify the `retype` branch exists in your repository before proceeding. Cloudflare Pages requires the branch to be present when you configure the project.
+    </Warning>
+  </Step>
+
+  <Step title="Sign up for Cloudflare">
+    Go to [cloudflare.com](https://www.cloudflare.com/) and click **Sign up** in the top-right corner. Follow the registration prompts.
+
+    After signing up, you will have access to your Cloudflare dashboard.
+  </Step>
+
+  <Step title="Create a new Pages project">
+    1. In the Cloudflare dashboard, scroll down to the **Pages** section in the left sidebar and click it.
+    1. Click **Create a project**.
+    1. Click **Connect to Git**.
+    1. Authorize Cloudflare to access your GitHub account and select your repository.
+  </Step>
+
+  <Step title="Configure build settings">
+    On the **Set up builds and deployments** screen, configure the following:
+
+    | Setting | Value |
+    |---|---|
+    | **Project name** | Your preferred name (this becomes the default `pages.dev` subdomain) |
+    | **Production branch** | `retype` |
+    | **Build command** | *(leave blank — the branch already contains built output)* |
+    | **Build output directory** | `/` |
+
+    <Tip>
+    If you prefer Cloudflare to build the site instead of using the pre-built `retype` branch, set the build command to `retype build` and the output directory to `.retype`. You will also need to install Retype as part of the build — see the [Docker guide](/hosting/docker) for an example of installing Retype in a build environment.
+    </Tip>
+  </Step>
+
+  <Step title="Set environment variables (if using a Retype license key)">
+    If your project requires a Retype license key:
+
+    1. Expand the **Environment variables (advanced)** section on the build settings screen.
+    1. Click **Add variable**.
+    1. Set the variable name to `RETYPE_KEY` and the value to your license key.
+
+    Retype automatically reads the `RETYPE_KEY` environment variable during the build.
+  </Step>
+
+  <Step title="Save and deploy">
+    Click **Save and Deploy**. Cloudflare Pages will deploy your site within a few moments. Once complete, your site will be available at `<project-name>.pages.dev`.
+  </Step>
+</Steps>
+
+## Custom domain
+
+To use a custom domain with your Cloudflare Pages site:
+
+<Steps>
+  <Step title="Add a custom domain">
+    In the Cloudflare Pages dashboard, open your project and go to the **Custom domains** tab. Click **Set up a custom domain** and enter your domain name.
+  </Step>
+
+  <Step title="Configure DNS">
+    If your domain is already managed by Cloudflare, the DNS record is added automatically. If your domain is registered elsewhere, follow the prompts to add the required CNAME record at your DNS provider.
+  </Step>
+
+  <Step title="Update retype.yml">
+    Update the `url` in your `retype.yml` to your custom domain:
+
+    ```yaml retype.yml
+    url: docs.example.com
+    ```
+  </Step>
+</Steps>
+
+## Other hosting options
+
+<CardGroup cols={2}>
+  <Card title="GitHub Pages" icon="github" href="/hosting/github-pages">
+    Deploy to GitHub Pages for free using the Retype Build Action.
+  </Card>
+  <Card title="Netlify" icon="globe" href="/hosting/netlify">
+    Deploy to Netlify with automatic builds from your Git repository.
+  </Card>
+  <Card title="Docker" icon="box" href="/hosting/docker">
+    Run Retype in a Docker container for flexible self-hosted deployments.
+  </Card>
+</CardGroup>

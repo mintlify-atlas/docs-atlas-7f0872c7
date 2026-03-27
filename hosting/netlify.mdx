@@ -1,0 +1,103 @@
+---
+title: Netlify
+description: Deploy your Retype documentation site to Netlify by connecting your GitHub repository and configuring the build settings.
+---
+
+[Netlify](https://netlify.com) is a popular web hosting platform with a generous free tier and automatic deployments from Git. This guide walks through connecting your GitHub repository to Netlify and deploying your Retype site.
+
+## Prerequisites
+
+- A GitHub repository containing your Retype project source files
+- The Retype Build Action configured to publish built output to a `retype` branch (see the [GitHub Actions guide](/hosting/github-pages))
+- A Netlify account (free tier is sufficient)
+
+## Deployment
+
+<Steps>
+  <Step title="Add the Retype Build Action">
+    Before connecting Netlify, set up the [Retype GitHub Build Action](/hosting/github-pages#automated-deployment-with-github-actions) in your repository. The action builds your site and pushes the output to a `retype` branch, which Netlify will then serve.
+  </Step>
+
+  <Step title="Sign up for Netlify">
+    Go to [netlify.com](https://www.netlify.com/) and sign up. You can authenticate directly with your GitHub account for a faster setup.
+
+    After signing up, you will land on the Netlify dashboard.
+  </Step>
+
+  <Step title="Create a new site from Git">
+    1. Click **Add new site** > **Import an existing project** in the Netlify dashboard.
+    1. Select **GitHub** as the Git provider.
+    1. Authorize Netlify to access your GitHub account when prompted.
+    1. Search for and select the repository you want to deploy.
+  </Step>
+
+  <Step title="Configure build settings">
+    On the **Build settings** screen, configure the following:
+
+    | Setting | Value |
+    |---|---|
+    | **Branch to deploy** | `retype` |
+    | **Build command** | `retype build` |
+    | **Publish directory** | `.retype` |
+
+    <Note>
+    If you are deploying from the `retype` branch (the pre-built output from the GitHub Action), you can leave the build command blank and set the publish directory to `/` — Netlify will serve the files directly without rebuilding.
+    </Note>
+  </Step>
+
+  <Step title="Set environment variables (if using a Retype license key)">
+    If your project requires a Retype license key, add it as an environment variable so it is not stored in your repository:
+
+    1. In the Netlify dashboard, go to **Site configuration** > **Environment variables**.
+    1. Click **Add a variable**.
+    1. Set the key to `RETYPE_KEY` and the value to your license key.
+
+    Retype automatically reads the `RETYPE_KEY` environment variable during the build.
+  </Step>
+
+  <Step title="Deploy the site">
+    Click **Deploy site**. Netlify will trigger an initial build and deploy. Once complete, your site will be available at a generated `netlify.app` subdomain shown in the dashboard.
+  </Step>
+</Steps>
+
+## Deploying updates
+
+Once the site is connected, deployments are automatic. When you push changes to the configured branch, Netlify detects the update and starts a new build and deploy automatically. No manual action is required.
+
+## Custom domain
+
+<Steps>
+  <Step title="Add your domain in Netlify">
+    In the Netlify dashboard, go to **Domain settings** and click **Add custom domain**. Enter your domain name and click **Verify**.
+  </Step>
+
+  <Step title="Configure DNS">
+    Follow the prompts in the Netlify dashboard to update your domain's DNS records. Netlify provides specific records (CNAME or A records) depending on whether you are using a subdomain or root domain.
+  </Step>
+
+  <Step title="Enable HTTPS">
+    Netlify provisions a free TLS certificate via Let's Encrypt automatically once DNS propagates. You can verify the certificate status under **Domain settings** > **HTTPS**.
+  </Step>
+
+  <Step title="Update retype.yml">
+    Update the `url` in your `retype.yml` to your custom domain:
+
+    ```yaml retype.yml
+    url: docs.example.com
+    ```
+  </Step>
+</Steps>
+
+## Other hosting options
+
+<CardGroup cols={2}>
+  <Card title="GitHub Pages" icon="github" href="/hosting/github-pages">
+    Deploy to GitHub Pages for free using the Retype Build Action.
+  </Card>
+  <Card title="Cloudflare Pages" icon="cloud" href="/hosting/cloudflare">
+    Host on Cloudflare Pages with global CDN and DDoS protection.
+  </Card>
+  <Card title="Docker" icon="box" href="/hosting/docker">
+    Run Retype in a Docker container for flexible self-hosted deployments.
+  </Card>
+</CardGroup>

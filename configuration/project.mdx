@@ -1,0 +1,1063 @@
+---
+title: Project configuration
+description: Reference for all retype.yml project-level configuration options, including branding, navigation, search, theme, and integrations.
+---
+
+Retype reads the **retype.yml** file for instructions on how to configure and build your project. The file is typically placed in the root of your project.
+
+<Note>
+When running `retype start`, any changes to **retype.yml** are automatically detected and the website is regenerated in the browser. If you started the server with `retype serve`, you need to run `retype build` manually and refresh the browser.
+</Note>
+
+The **retype.yml** file is optional but recommended. If you run `retype start` without one, Retype will auto-generate a basic **retype.yml** you can then customize. You can also run `retype init` to generate it explicitly.
+
+## Sample retype.yml
+
+```yml retype.yml
+input: .
+output: .retype
+
+url: docs.example.com
+
+start:
+  pro: true  # Try Retype Pro features locally
+
+branding:
+  title: Project Name
+  label: Docs
+
+links:
+  - text: Getting Started
+    link: https://retype.com/guides/getting-started/
+
+footer:
+  copyright: "&copy; Copyright {{ year }}. All rights reserved."
+```
+
+---
+
+## input
+
+<ParamField path="input" type="string" default=".">
+  Custom path to the input directory. The path is relative to the **retype.yml** location.
+
+  ```yml
+  input: ./src
+  ```
+</ParamField>
+
+---
+
+## output
+
+<ParamField path="output" type="string" default=".retype">
+  Custom path to the output directory. The path is relative to the **retype.yml** location.
+
+  ```yml
+  output: ./docs
+  ```
+
+  <Note>The `output` directory is only used by `retype build`. When using `retype start`, files are stored in memory and not written to disk.</Note>
+</ParamField>
+
+---
+
+## url
+
+<ParamField path="url" type="string">
+  The base URL of your website. Retype uses this to construct absolute links and generate a CNAME file.
+
+  ```yml
+  url: docs.example.com
+  ```
+
+  Subdomains, paths, and explicit protocols are all supported:
+
+  ```yml
+  url: example.com/docs
+  url: http://example.com/docs/
+  url: companyx.github.io/docs  # GitHub Pages without custom CNAME
+  ```
+
+  If no protocol is supplied, Retype assumes `https`.
+</ParamField>
+
+---
+
+## branding
+
+Branding configuration for your Retype generated website.
+
+<ParamField path="branding.title" type="string">
+  The main text title shown in the upper-left corner of the generated website. Can be used alongside `logo` and `logoDark`.
+
+  ```yml
+  branding:
+    title: Example.com
+  ```
+</ParamField>
+
+<ParamField path="branding.label" type="string" default="Docs">
+  Optional logo label text rendered to the right of the title or logo in the upper-left corner.
+
+  ```yml
+  branding:
+    label: Docs
+  ```
+</ParamField>
+
+<ParamField path="branding.logo" type="string">
+  Path to a logo image file relative to [`input`](#input), or an inline `<svg>` string. Default is `null`.
+
+  ```yml
+  branding:
+    logo: static/logo.png
+  ```
+</ParamField>
+
+<ParamField path="branding.logoDark" type="string">
+  Path to a dark mode logo image relative to [`input`](#input), or an inline `<svg>` string. Default is `null`.
+
+  ```yml
+  branding:
+    logo: static/logo.png
+    logoDark: static/logo-dark.png
+  ```
+</ParamField>
+
+<ParamField path="branding.logoWidth" type="number">
+  Custom width (in pixels) for the branding logo. If not set, Retype auto-detects the intrinsic width.
+
+  ```yml
+  branding:
+    logo: ./logo.svg
+    logoWidth: 150
+  ```
+</ParamField>
+
+<ParamField path="branding.logoHeight" type="number">
+  Custom height (in pixels) for the branding logo. If not set, Retype auto-detects the intrinsic height.
+
+  ```yml
+  branding:
+    logo: ./logo.svg
+    logoHeight: 31
+  ```
+</ParamField>
+
+<ParamField path="branding.logoAlign" type="string" default="left">
+  Logo alignment relative to the `title`. Accepted values: `left`, `right`.
+
+  ```yml
+  branding:
+    logo: static/logo.png
+    logoAlign: right
+  ```
+</ParamField>
+
+<ParamField path="branding.baseColor" type="string" default="#5495f1">
+  **Retype Pro only.** Sets the main brand color as a shorthand for `theme.base.base-color`.
+
+  ```yml
+  branding:
+    baseColor: "#8839ef"
+  ```
+</ParamField>
+
+<ParamField path="branding.colors.label" type="object">
+  Override text and background colors for the branding label badge.
+
+  | Option | Type | Description |
+  | --- | --- | --- |
+  | `text` | `string` | Label text color |
+  | `background` | `string` | Label background color |
+
+  ```yml
+  branding:
+    colors:
+      label:
+        text: "#ffffff"
+        background: "#ff0000"
+  ```
+</ParamField>
+
+---
+
+## links
+
+Custom links added to the top-bar navigation of all pages.
+
+```yml
+links:
+  - text: Getting Started
+    link: https://retype.com/getting_started/
+```
+
+<ParamField path="links[].text" type="string">
+  The link text label.
+</ParamField>
+
+<ParamField path="links[].link" type="string">
+  The URL for the link. Accepts a `.md` filename, internal path, or external URL.
+</ParamField>
+
+<ParamField path="links[].icon" type="string">
+  An icon for the link. Accepts an Octicon name, emoji shortcode, `<svg>` element, or path to an image file.
+
+  ```yml
+  links:
+    - text: Issues
+      link: https://github.com/retypeapp/retype/issues/
+      icon: bug
+  ```
+</ParamField>
+
+<ParamField path="links[].iconAlign" type="string" default="left">
+  Position of the icon relative to the link text. Accepted values: `left`, `right`.
+</ParamField>
+
+<ParamField path="links[].target" type="string">
+  Sets the `target` attribute of the hyperlink. Use `blank` to open in a new tab (Retype automatically transforms `blank` → `_blank`).
+</ParamField>
+
+<ParamField path="links[].title" type="string">
+  Sets the `title` attribute on the hyperlink, shown as a browser tooltip on hover.
+</ParamField>
+
+<ParamField path="links[].items" type="list">
+  Nested menu items that render the parent link as a dropdown in the header navigation. Dropdown menus are supported one level deep. Each nested item supports the same properties as top-level links.
+
+  ```yml
+  links:
+    - text: Guides
+      items:
+        - text: Installation
+          link: /guides/installation.md
+          icon: download
+        - text: Configuration
+          link: /configuration/project.md
+  ```
+</ParamField>
+
+---
+
+## footer
+
+<ParamField path="footer.copyright" type="string">
+  Site-wide copyright statement added to the footer of every page. Supports Markdown and the `{{ year }}` template variable.
+
+  ```yml
+  footer:
+    copyright: "© Copyright {{ year }}. [Example, Inc.](https://example.com/) All rights reserved."
+  ```
+</ParamField>
+
+<ParamField path="footer.links" type="object">
+  Footer links use the same configuration options as top-level [`links`](#links).
+
+  ```yml
+  footer:
+    links:
+      - text: License
+        link: license.md
+      - text: Support
+        link: https://github.com/retypeapp/retype/discussions/
+  ```
+</ParamField>
+
+---
+
+## meta
+
+<ParamField path="meta.title" type="string">
+  A site-wide suffix appended to the HTML `<title>` element of all pages.
+
+  ```yml
+  meta:
+    title: " | Example.com - Widgets for the internet"
+  ```
+
+  With an `About us` page, the resulting title would be:
+  ```html
+  <title>About us | Example.com - Widgets for the internet</title>
+  ```
+</ParamField>
+
+<ParamField path="meta.siteName" type="string">
+  Sets the value for the `<meta property="og:site_name">` tag.
+
+  ```yml
+  meta:
+    siteName: Retype
+  ```
+</ParamField>
+
+---
+
+## edit
+
+Enables and customizes **Edit this page** links on content pages.
+
+<ParamField path="edit.repo" type="string">
+  The repository URL where source files are hosted. Setting this value enables **Edit this page** links.
+
+  ```yml
+  edit:
+    repo: "https://github.com/<your-organization>/<your-repo>/"
+  ```
+
+  To link directly to the edit view:
+
+  ```yml
+  edit:
+    repo: "https://github.com/<your-organization>/<your-repo>/edit/"
+  ```
+</ParamField>
+
+<ParamField path="edit.base" type="string">
+  Optional base path to a subdirectory within the repository where the `.md` source files are stored.
+
+  ```yml
+  edit:
+    repo: "https://github.com/your-org/your-repo"
+    base: /src/docs
+  ```
+</ParamField>
+
+<ParamField path="edit.branch" type="string" default="main">
+  The branch to point to within the repo.
+
+  ```yml
+  edit:
+    repo: "https://github.com/your-org/your-repo"
+    branch: master
+  ```
+</ParamField>
+
+<ParamField path="edit.label" type="string" default="Edit this page">
+  Custom label text for the edit link.
+
+  ```yml
+  edit:
+    repo: "https://github.com/your-org/your-repo"
+    label: Edit on GitHub
+  ```
+</ParamField>
+
+---
+
+## nav
+
+Navigation configuration for the left sidebar.
+
+<ParamField path="nav.mode" type="string" default="default">
+  **Retype Pro only.** Controls how the sidebar navigation is structured.
+
+  | Option | Description |
+  | --- | --- |
+  | `default` | Expandable/collapsible tree structure |
+  | `stack` | Top-level folders are always expanded, creating a stacked layout |
+
+  ```yml
+  nav:
+    mode: stack
+  ```
+</ParamField>
+
+<ParamField path="nav.icons.mode" type="string" default="all">
+  **Retype Pro only.** Controls how icons are displayed in the left sidebar.
+
+  | Mode | Description |
+  | --- | --- |
+  | `all` | Show icons for all navigation items |
+  | `folders` | Show icons only for folder items |
+  | `pages` | Show icons only for page items |
+  | `top` | Show icons only for top-level items |
+  | `none` | Hide all navigation icons |
+
+  ```yml
+  nav:
+    icons:
+      mode: none
+  ```
+</ParamField>
+
+---
+
+## toc
+
+**Retype Pro only.** Controls the right-sidebar Table of Contents.
+
+<ParamField path="toc.depth" type="string | number" default="2-3">
+  The heading depth range to include in the Table of Contents.
+
+  | Value | Description |
+  | --- | --- |
+  | `2` | H2 headings only |
+  | `2-3` | H2 to H3 (default) |
+  | `1-4` | H1 to H4 |
+  | `2,4` | H2 and H4 only |
+
+  ```yml
+  toc:
+    depth: 2-3
+  ```
+</ParamField>
+
+<ParamField path="toc.label" type="string">
+  Custom label for the top of the Table of Contents column.
+
+  ```yml
+  toc:
+    label: On this page
+  ```
+</ParamField>
+
+---
+
+## search
+
+Customization options for the website search component.
+
+<ParamField path="search.mode" type="string" default="full">
+  The search index creation mode.
+
+  | Mode | Description |
+  | --- | --- |
+  | `full` | Full-text index of all headings and content |
+  | `partial` | All headings plus first paragraph under each heading |
+  | `basic` | All headings plus only the first paragraph per page |
+
+  ```yml
+  search:
+    mode: partial
+  ```
+
+  <Tip>If search feels slow on a large project, try `partial` or `basic` mode.</Tip>
+</ParamField>
+
+<ParamField path="search.hotkeys" type="list" default="k">
+  Keyboard key(s) to focus the search field.
+
+  ```yml
+  search:
+    hotkeys:
+      - "/"
+  ```
+</ParamField>
+
+<ParamField path="search.maxResults" type="number" default="20">
+  Maximum number of search results to display.
+</ParamField>
+
+<ParamField path="search.minChars" type="number" default="2">
+  Minimum number of characters required before a search query is run.
+</ParamField>
+
+<ParamField path="search.placeholder" type="string" default="Search">
+  Placeholder text displayed in the search input.
+</ParamField>
+
+<ParamField path="search.noResultsFoundMsg" type="string" default="Sorry, no results found.">
+  Message shown when no results are returned.
+</ParamField>
+
+<ParamField path="search.excludeCode" type="boolean" default="false">
+  Exclude code blocks from the search index.
+
+  ```yml
+  search:
+    excludeCode: true
+  ```
+</ParamField>
+
+<ParamField path="search.exclude" type="list">
+  **Retype Pro only.** Exclude pages or folders from the search index while still generating them in the website. Uses the same wildcard patterns as [`exclude`](#exclude).
+
+  ```yml
+  search:
+    exclude:
+      - /blog
+      - /draft
+  ```
+</ParamField>
+
+<ParamField path="search.preload" type="boolean" default="false">
+  Preload the search index on page load. Useful when combined with `generator.directoryIndex.append: true` for offline filesystem browsing.
+</ParamField>
+
+---
+
+## theme
+
+**Retype Pro only.** Customize your site's visual appearance by overriding CSS design variables.
+
+See the full [theme variables reference](/configuration/theme-variables) for all available variables.
+
+<ParamField path="theme.base" type="object">
+  Light mode theme variables. All theme variables can be customized here.
+
+  ```yml
+  theme:
+    base:
+      base-color: "#8839ef"
+      base-bg: "#eff1f5"
+      primary: "#1e66f5"
+      success: "#40a02b"
+      danger: "#d20f39"
+      warning: "#df8e1d"
+  ```
+</ParamField>
+
+<ParamField path="theme.dark" type="object">
+  Dark mode theme variables. These override `theme.base` variables when dark mode is active.
+
+  ```yml
+  theme:
+    dark:
+      base-color: "#ca9ee6"
+      base-bg: "#303446"
+  ```
+</ParamField>
+
+---
+
+## integrations
+
+### Google Analytics
+
+<ParamField path="integrations.googleAnalytics.id" type="string">
+  Google Analytics measurement ID.
+
+  ```yml
+  integrations:
+    googleAnalytics:
+      id: A-BCDEFGHIJ1
+  ```
+</ParamField>
+
+### Google Tag Manager
+
+<ParamField path="integrations.googleTagManager.id" type="string">
+  Google Tag Manager container ID.
+
+  ```yml
+  integrations:
+    googleTagManager:
+      id: GTM-XXXXXXX
+  ```
+</ParamField>
+
+### Plausible Analytics
+
+<ParamField path="integrations.plausible.domain" type="string">
+  The domain registered in your Plausible account. Multiple domains can be separated by commas.
+
+  ```yml
+  integrations:
+    plausible:
+      domain: example.com
+  ```
+</ParamField>
+
+<ParamField path="integrations.plausible.host" type="string">
+  Custom Plausible host for self-hosted deployments.
+
+  ```yml
+  integrations:
+    plausible:
+      host: plausible.example.com
+  ```
+</ParamField>
+
+---
+
+## include and exclude
+
+<ParamField path="exclude" type="list">
+  Exclude files or folders from the build output. Uses `.gitignore`-style patterns with support for `?`, `*`, `**`, and `!`.
+
+  ```yml
+  exclude:
+    - "draft/"
+    - "*_temp/"
+    - "/src/temp.md"
+  ```
+
+  <Note>Files and folders prefixed with `.` or `_`, and any `node_modules` folder, are excluded by default.</Note>
+</ParamField>
+
+<ParamField path="include" type="list">
+  Explicitly include files or folders that would otherwise be excluded. Retype automatically includes common image formats, PDFs, ZIPs, and the `static/`, `public/`, `assets/`, and `resources/` folders.
+
+  ```yml
+  include:
+    - "*.py"
+    - "demo*.js"
+    - "**/www/**"
+  ```
+</ParamField>
+
+---
+
+## favicon
+
+<ParamField path="favicon" type="string">
+  Path to a custom `.ico` or `.png` favicon, relative to `input`. By default, Retype looks for `favicon.ico` or `favicon.png` in the root of `input`.
+
+  ```yml
+  favicon: static/favicon.png
+  ```
+</ParamField>
+
+---
+
+## locale
+
+<ParamField path="locale" type="string" default="en">
+  The primary language for the generated website. Retype supports 24 languages. Provide an ISO language code.
+
+  ```yml
+  locale: fr
+  ```
+
+  Supported codes include: `ar`, `da`, `de`, `el`, `en`, `es`, `fi`, `fr`, `he`, `hi`, `hu`, `hy`, `it`, `ja`, `ko`, `nb`, `nl`, `pt`, `pt-PT`, `ro`, `ru`, `sv`, `tr`, `zh`, and more.
+</ParamField>
+
+<ParamField path="locale.dateFormat" type="string">
+  Configure how dates are rendered across the site, including blog dates and the Last Updated component.
+
+  ```yml
+  locale:
+    dateFormat: MM-dd-yyyy
+  ```
+
+  Supported specifiers: `yyyy`, `yy`, `MMMM`, `MMM`, `MM`, `M`, `dddd`, `ddd`, `dd`, `d`.
+</ParamField>
+
+---
+
+## scheme
+
+**Retype Pro only.** Control the default color mode for the website.
+
+<ParamField path="scheme.mode" type="string" default="system">
+  Sets the default color scheme.
+
+  | Mode | Description |
+  | --- | --- |
+  | `system` | Follow the visitor's system preference (default) |
+  | `dark` | Always render in dark mode |
+  | `light` | Always render in light mode |
+
+  ```yml
+  scheme:
+    mode: dark
+  ```
+
+  <Note>If a visitor manually selects a color mode using the toggle, their choice overrides this setting.</Note>
+</ParamField>
+
+---
+
+## serve
+
+Configuration for the built-in Retype development web server.
+
+<ParamField path="serve.host" type="string" default="localhost">
+  Host address for the local development server. A custom port can be appended with a colon.
+
+  ```yml
+  serve:
+    host: 127.0.0.1
+    # or with a port:
+    # host: 127.0.0.1:5005
+  ```
+</ParamField>
+
+<ParamField path="serve.port" type="number" default="5001">
+  Port for the local development server. If the port is in use, Retype auto-increments unless a value is explicitly set.
+
+  ```yml
+  serve:
+    port: 5005
+  ```
+</ParamField>
+
+---
+
+## start
+
+Options that apply during the `retype start` command.
+
+<ParamField path="start.open" type="boolean" default="true">
+  Set to `false` to prevent Retype from opening a browser window when `retype start` is run.
+
+  ```yml
+  start:
+    open: false
+  ```
+</ParamField>
+
+<ParamField path="start.pro" type="boolean" default="false">
+  Enable Pro mode locally to trial Retype Pro features without a license key.
+
+  ```yml
+  start:
+    pro: true
+  ```
+</ParamField>
+
+<ParamField path="start.debounce" type="number" default="100">
+  Delay in milliseconds before `retype start` reacts to file changes.
+</ParamField>
+
+---
+
+## backlinks
+
+**Retype Pro only.** Controls the automatic display of inbound links ("See also") at the bottom of pages.
+
+<ParamField path="backlinks.enabled" type="boolean" default="true">
+  Enable or disable backlinks for the entire project.
+
+  ```yml
+  backlinks:
+    enabled: false
+  ```
+</ParamField>
+
+<ParamField path="backlinks.title" type="string" default="See also">
+  Heading text displayed above the backlinks section.
+
+  ```yml
+  backlinks:
+    title: "Referenced by"
+  ```
+</ParamField>
+
+<ParamField path="backlinks.maxResults" type="number" default="12">
+  Maximum number of backlinks to display per page.
+</ParamField>
+
+<ParamField path="backlinks.exclude" type="list">
+  Exclude pages or folders from appearing as backlinks. Supports the same wildcard patterns as [`exclude`](#exclude).
+
+  ```yml
+  backlinks:
+    exclude:
+      - /blog
+  ```
+</ParamField>
+
+<ParamField path="backlinks.include" type="list">
+  Explicitly include pages or folders as backlink sources, overriding `backlinks.exclude`.
+
+  ```yml
+  backlinks:
+    exclude:
+      - "*"
+    include:
+      - /guides
+  ```
+</ParamField>
+
+---
+
+## breadcrumb
+
+**Retype Pro only.** Hierarchical breadcrumb navigation.
+
+<ParamField path="breadcrumb.enabled" type="boolean" default="true">
+  Enable or disable breadcrumb navigation project-wide.
+
+  ```yml
+  breadcrumb:
+    enabled: false
+  ```
+</ParamField>
+
+<ParamField path="breadcrumb.home" type="string | boolean">
+  Customize or remove the first (home) node of the breadcrumb. Set to `false` to remove it entirely, or provide a label string or icon shortcode.
+
+  ```yml
+  breadcrumb:
+    home: ":icon-home:"  # use an icon
+  ```
+</ParamField>
+
+<ParamField path="breadcrumb.separator" type="string">
+  Customize the separator between breadcrumb nodes.
+
+  ```yml
+  breadcrumb:
+    separator: "|"
+  ```
+</ParamField>
+
+---
+
+## blog
+
+Configuration for blog summary pages and pagination.
+
+<ParamField path="blog.base" type="string" default="blog">
+  URL base path for the blog summary pages.
+
+  ```yml
+  blog:
+    base: news  # pages served at /news/ instead of /blog/
+  ```
+</ParamField>
+
+<ParamField path="blog.layout" type="string" default="blog">
+  Default layout for all blog posts.
+</ParamField>
+
+<ParamField path="blog.pageSize" type="number" default="10">
+  Number of blog posts per paginated summary page.
+</ParamField>
+
+<ParamField path="blog.maxResults" type="number">
+  Maximum total blog posts included across all summary pages. Default is unlimited.
+</ParamField>
+
+<ParamField path="blog.title" type="string">
+  Custom heading title for the blog summary page.
+</ParamField>
+
+---
+
+## generator
+
+<ParamField path="generator.recase" type="string" default="all">
+  Controls how output file and folder names are cased.
+
+  | Option | Description |
+  | --- | --- |
+  | `all` | Convert all names to lowercase (default) |
+  | `none` | Preserve original casing |
+
+  ```yml
+  generator:
+    recase: none
+  ```
+</ParamField>
+
+<ParamField path="generator.paths" type="string" default="relative">
+  URL kind preference for resolved links: `relative`, `root`, or `source`.
+</ParamField>
+
+<ParamField path="generator.trailingSlash" type="boolean" default="true">
+  Set to `false` to remove trailing slashes from generated links.
+</ParamField>
+
+<ParamField path="generator.directoryIndex.name" type="string" default="index.html">
+  The default HTML document filename generated by Retype.
+</ParamField>
+
+<ParamField path="generator.directoryIndex.append" type="boolean" default="false">
+  Append the default document filename to resolved URLs (e.g., `/guides/index.html` instead of `/guides/`). Useful for offline filesystem browsing.
+</ParamField>
+
+---
+
+## cache
+
+<ParamField path="cache.strategy" type="string" default="query">
+  Cache-busting strategy for JS and CSS assets.
+
+  | Strategy | Example URL |
+  | --- | --- |
+  | `none` | `/resources/js/retype.js` |
+  | `path` | `/resources/js/retype.v1.10.js` |
+  | `query` | `/resources/js/retype.js?v=1.10` |
+
+  ```yml
+  cache:
+    strategy: query
+  ```
+</ParamField>
+
+<ParamField path="cache.token" type="string">
+  Optional custom cache-busting token. If not set, Retype uses `{version}.{milliseconds since 2000-01-01}`.
+</ParamField>
+
+---
+
+## data
+
+<ParamField path="data" type="object">
+  Custom key-value data available as template variables on all pages.
+
+  ```yml
+  data:
+    productName: Company X
+    productVersion: v5.1
+  ```
+
+  Use `{{ productName }}` in any page to render the value. Nested objects and arrays are supported, and accessible via dot notation.
+</ParamField>
+
+---
+
+## markdown
+
+<ParamField path="markdown.lineBreaks" type="string" default="soft">
+  Controls how single line breaks are handled. `soft` follows the CommonMark spec; `hard` emits a `<br />` for every line break.
+
+  ```yml
+  markdown:
+    lineBreaks: hard
+  ```
+</ParamField>
+
+---
+
+## snippets
+
+<ParamField path="snippets.lineNumbers" type="list">
+  Enable line numbering on code blocks project-wide by listing language identifiers. Use `"*"` for all languages.
+
+  ```yml
+  snippets:
+    lineNumbers:
+      - js
+      - json
+  ```
+</ParamField>
+
+---
+
+## outbound
+
+**Retype Pro only.** Customize the behavior of outbound (external) links.
+
+<ParamField path="outbound.enabled" type="boolean" default="true">
+  Enable or disable outbound link decoration (external icon + new tab).
+</ParamField>
+
+<ParamField path="outbound.icon" type="string" default="link-external">
+  Icon used for outbound links. Set to `""` to disable the icon without disabling the feature.
+</ParamField>
+
+<ParamField path="outbound.target" type="string" default="blank">
+  `target` attribute for outbound links.
+</ParamField>
+
+<ParamField path="outbound.exclude" type="list">
+  Domains or URL patterns to exclude from outbound link treatment.
+
+  ```yml
+  outbound:
+    exclude:
+      - example.com
+  ```
+</ParamField>
+
+---
+
+## cname
+
+<ParamField path="cname" type="boolean | string">
+  By default, Retype auto-generates a **CNAME** file when [`url`](#url) is set. Set to `false` to disable this behavior.
+
+  ```yml
+  cname: false
+  ```
+
+  <Note>In most cases you should set `url` and let Retype handle the CNAME file automatically.</Note>
+</ParamField>
+
+---
+
+## showSidebarFilter
+
+<ParamField path="showSidebarFilter" type="boolean" default="true">
+  Controls visibility of the filter component above the left sidebar navigation tree.
+
+  ```yml
+  showSidebarFilter: false
+  ```
+</ParamField>
+
+---
+
+## lastUpdated
+
+Controls automatic last-updated footer metadata derived from Git commit history.
+
+<ParamField path="lastUpdated.date.enabled" type="boolean" default="true">
+  Enable or disable the auto-generated last updated date in page footers.
+</ParamField>
+
+<ParamField path="lastUpdated.date.source" type="string" default="committer">
+  Git timestamp to use: `author` or `committer`.
+</ParamField>
+
+<ParamField path="lastUpdated.by.enabled" type="boolean" default="false">
+  Enable display of who last updated the page.
+</ParamField>
+
+<ParamField path="lastUpdated.by.source" type="string" default="committer">
+  Git identity to use for the `by` value: `author` or `committer`.
+</ParamField>
+
+<Tip>
+In GitHub Actions, add `fetch-depth: 0` to your `actions/checkout` step to ensure full Git history is available for `lastUpdated` generation.
+</Tip>
+
+---
+
+## hub
+
+**Retype Pro only.** A shortcut link shown to the left of the project logo, useful for linking from a docs subdomain back to the main site.
+
+<ParamField path="hub.link" type="string">
+  URL for the hub link. Setting a value enables the hub.
+
+  ```yml
+  hub:
+    link: https://example.com/
+  ```
+</ParamField>
+
+<ParamField path="hub.alt" type="string">
+  Tooltip text for the hub link.
+</ParamField>
+
+<ParamField path="hub.target" type="string">
+  `target` attribute for the hub link. Use `blank` to open in a new tab.
+</ParamField>
+
+---
+
+## templating
+
+<ParamField path="templating.enabled" type="boolean" default="true">
+  Enable or disable the Retype content templating engine project-wide.
+</ParamField>
+
+<ParamField path="templating.liquid" type="boolean" default="false">
+  Enable Liquid `{% ... %}` syntax. Note: incompatible with GitBook-style component syntax.
+</ParamField>
+
+<ParamField path="templating.loopLimit" type="number" default="1000">
+  Maximum loop iterations allowed in templates. Set to `0` to disable the limit (not recommended).
+</ParamField>
+
+<ParamField path="templating.namespace" type="string">
+  Optional namespace prefix for template variables. When set, variables are accessed as `{{ namespace.project.branding.title }}`.
+</ParamField>
+
+---
+
+## poweredByRetype
+
+<ParamField path="poweredByRetype" type="boolean">
+  **Retype Pro only.** Set to `false` to remove the "Powered by Retype" branding from the footer.
+
+  ```yml
+  poweredByRetype: false
+  ```
+</ParamField>

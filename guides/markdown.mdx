@@ -1,0 +1,231 @@
+---
+title: Markdown
+description: Write documentation pages using standard Markdown syntax and Retype-specific extensions.
+---
+
+Markdown `.md` pages are plain text documents with a simple, human-readable syntax designed to make writing for the internet easier. No special software is required — any basic text editor will do. Save the file with a `.md` extension and Retype handles the rest.
+
+## Quick start
+
+A minimal page requires only a title and some content:
+
+```md
+# Page title here
+
+This is a paragraph.
+```
+
+Build on that foundation with formatting, images, and lists:
+
+```md
+# Getting Started
+
+Welcome to **my project**. This guide covers the _basics_.
+
+## Prerequisites
+
+- Node.js 18 or later
+- A text editor
+
+## Installation
+
+1. Clone the repository
+2. Run `npm install`
+3. Run `retype start`
+
+![Screenshot of the dashboard](/images/dashboard.png)
+```
+
+<Steps>
+  <Step title="Create a Markdown file">
+    Create a `readme.md` file in your project root.
+  </Step>
+  <Step title="Add a title">
+    Add a `# Title` as the first heading in the file.
+  </Step>
+  <Step title="Start writing">
+    Add your content below the title using standard Markdown.
+  </Step>
+  <Step title="Run Retype">
+    Run `retype start` to preview your site locally.
+  </Step>
+</Steps>
+
+## Home page
+
+Your project should include a default file in the root directory. Retype recognises any of the following filenames as the home page:
+
+- `readme.md`
+- `index.md`
+- `default.md`
+- `welcome.md`
+- `home.md`
+
+The same convention applies inside subdirectories. Given this structure:
+
+```
+|-- guides
+    |-- index.md
+    |-- getting-started.md
+|-- readme.md
+```
+
+Retype generates three pages at the following URLs:
+
+1. `/`
+2. `/guides/`
+3. `/guides/getting-started/`
+
+<Note>
+If your site shows the default Retype **Welcome** page, you need to add a home page file (`readme.md`, `index.md`, etc.) to the root of your project.
+</Note>
+
+## Standard Markdown syntax
+
+### Headings
+
+Use `#` characters to create headings. Retype supports six levels.
+
+```md
+# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+###### Heading 6
+```
+
+### Text formatting
+
+```md
+**Bold text**
+_Italic text_
+~~Strikethrough~~
+`Inline code`
+```
+
+### Lists
+
+<CodeGroup>
+
+```md Unordered list
+- Item one
+- Item two
+  - Nested item
+- Item three
+```
+
+```md Ordered list
+1. First item
+2. Second item
+3. Third item
+```
+
+```md Task list
+- [x] Completed task
+- [ ] Pending task
+```
+
+</CodeGroup>
+
+### Links and images
+
+```md
+[Link text](https://example.com)
+![Alt text for image](/images/screenshot.png)
+```
+
+### Blockquotes
+
+```md
+> This is a blockquote.
+> It can span multiple lines.
+```
+
+### Tables
+
+```md
+| Column 1 | Column 2 | Column 3 |
+| -------- | -------- | -------- |
+| Cell 1   | Cell 2   | Cell 3   |
+| Cell 4   | Cell 5   | Cell 6   |
+```
+
+### Code blocks
+
+Fence code blocks with triple backticks and include a language tag for syntax highlighting:
+
+````md
+```javascript
+const greeting = 'Hello, world!';
+console.log(greeting);
+```
+````
+
+## Retype extensions
+
+### Reference links
+
+Retype supports `[[PageName]]` wiki-style reference links. These automatically link to matching pages in your project:
+
+```md
+See the [[Getting Started]] guide for setup instructions.
+```
+
+Retype resolves the link by searching for a page whose title or filename matches.
+
+### Definition lists
+
+Create definition lists with a term followed by a colon-prefixed definition:
+
+```md
+Term
+: Definition of the term.
+
+Another term
+: Another definition.
+```
+
+### Custom attributes
+
+Add CSS classes or other HTML attributes to elements using the `{ }` syntax:
+
+```md
+## Section heading {.custom-class}
+
+![Logo](/images/logo.png){.rounded}
+```
+
+### Callouts
+
+Retype uses `!!!` fences for callout blocks:
+
+```md
+!!!
+This is an informational callout.
+!!!
+
+!!!tip
+This is a tip callout.
+!!!
+
+!!!warning
+This is a warning callout.
+!!!
+```
+
+### Tabs
+
+```md
++++ Tab 1
+Content for tab one.
++++ Tab 2
+Content for tab two.
++++
+```
+
+## Components
+
+In addition to Markdown syntax, Retype includes a full library of [components](https://retype.com/components/) for enriching your documentation — including badges, cards, panels, code groups, and more.
+
+See the [Retype component reference](https://retype.com/components/) for the complete list.

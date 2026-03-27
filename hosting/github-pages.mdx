@@ -1,0 +1,154 @@
+---
+title: GitHub Pages
+description: Deploy your Retype documentation site to GitHub Pages for free using the Retype Build Action and GitHub Actions.
+---
+
+Hosting your Retype built website on [GitHub Pages](https://pages.github.com/) is free and straightforward to set up. The recommended approach uses the Retype Build Action to automate building and deploying on every push.
+
+<Tip>
+Retype offers a free **Community** key for projects hosted on GitHub Pages. The Community key unlocks Pro features at no cost. See the [Community key](https://retype.com/blog/2025-06-06-new-gitHub-pages-community-key/) announcement for details.
+</Tip>
+
+## Prerequisites
+
+- A GitHub repository containing your Retype project source files
+- GitHub Actions enabled on your repository (enabled by default)
+
+## Automated deployment with GitHub Actions
+
+The recommended way to deploy to GitHub Pages is to use the `retypeapp/action-build` GitHub Action. This workflow automatically builds your Retype site and pushes the output to a `retype` branch whenever you push changes.
+
+<Steps>
+  <Step title="Add the workflow file">
+    Create a file at `.github/workflows/retype-action.yml` in your repository with the following content:
+
+    ```yaml .github/workflows/retype-action.yml
+    name: Publish Retype powered website to GitHub Pages
+
+    on:
+      workflow_dispatch:
+      push:
+        branches:
+          - main
+
+    jobs:
+      publish:
+        runs-on: ubuntu-latest
+        permissions:
+          contents: write
+
+        steps:
+          - uses: actions/checkout@v6
+            with:
+              fetch-depth: 0
+
+          - uses: retypeapp/action-build@latest
+
+          - uses: retypeapp/action-github-pages@latest
+            with:
+              update-branch: true
+    ```
+
+    <Tip>
+    The `fetch-depth: 0` setting tells GitHub Actions to download the full Git history instead of a shallow clone. This is required if you want Retype to generate automatic `lastUpdated` footer values from Git commit metadata.
+    </Tip>
+
+    Commit and push this file. The workflow will run automatically and create a `retype` branch containing your built site.
+  </Step>
+
+  <Step title="Configure GitHub Pages">
+    Navigate to **Settings** > **Pages** in your repository. The URL follows this pattern:
+
+    ```
+    https://github.com/<organization>/<repo>/settings/pages
+    ```
+
+    Under **Branch**, select the `retype` branch from the dropdown, then click **Save**.
+
+    <Note>
+    The `retype` branch is created by the GitHub Action after its first successful run. If you do not see it in the list, push a commit to trigger the workflow first.
+    </Note>
+  </Step>
+
+  <Step title="Enable HTTPS">
+    After saving, check the **Enforce HTTPS** checkbox on the same Pages settings page. GitHub Pages provides a free TLS certificate for all `github.io` subdomains.
+  </Step>
+
+  <Step title="Set the url in retype.yml">
+    GitHub Pages hosts your site under a subfolder of your `github.io` subdomain. Set the [`url`](https://retype.com/configuration/project/#url) in your `retype.yml` to match:
+
+    ```yaml retype.yml
+    url: <organization>.github.io/<repo>/
+    ```
+
+    For example, if your GitHub organization is `CompanyX` and your repository is `docs`:
+
+    ```yaml retype.yml
+    url: companyx.github.io/docs/
+    ```
+
+    This ensures all internal links and assets resolve correctly when the site is served from a subfolder.
+  </Step>
+</Steps>
+
+## Manual deployment
+
+If you prefer to build locally and push the output manually, you can run `retype build` and then force-push the output directory to a `gh-pages` branch:
+
+```bash
+retype build
+git add .retype -f
+git commit -m "Build Retype site"
+git subtree push --prefix .retype origin gh-pages
+```
+
+Then configure GitHub Pages to serve from the `gh-pages` branch as described in Step 2 above.
+
+<Warning>
+Manual deployment is more error-prone than using the GitHub Action. The automated approach is strongly recommended for most projects.
+</Warning>
+
+## Custom domain
+
+To use a custom domain or subdomain instead of `github.io`:
+
+<Steps>
+  <Step title="Add the custom domain in GitHub">
+    On the **Settings** > **Pages** page, enter your domain in the **Custom domain** field and click **Save**. For example:
+
+    - Root domain: `example.com`
+    - Subdomain: `docs.example.com`
+  </Step>
+
+  <Step title="Configure DNS">
+    Update your domain's DNS records to point to GitHub Pages. Follow the [GitHub DNS configuration guide](https://docs.github.com/articles/using-a-custom-domain-with-github-pages/) for the exact records required for your domain type.
+  </Step>
+
+  <Step title="Update retype.yml">
+    Update the `url` in your `retype.yml` to your custom domain:
+
+    ```yaml retype.yml
+    url: example.com
+    ```
+
+    Or for a subdomain:
+
+    ```yaml retype.yml
+    url: docs.example.com
+    ```
+  </Step>
+</Steps>
+
+## Other hosting options
+
+<CardGroup cols={2}>
+  <Card title="Netlify" icon="globe" href="/hosting/netlify">
+    Deploy to Netlify with automatic builds from your Git repository.
+  </Card>
+  <Card title="Cloudflare Pages" icon="cloud" href="/hosting/cloudflare">
+    Host on Cloudflare Pages with global CDN and DDoS protection.
+  </Card>
+  <Card title="Docker" icon="box" href="/hosting/docker">
+    Run Retype in a Docker container for flexible self-hosted deployments.
+  </Card>
+</CardGroup>

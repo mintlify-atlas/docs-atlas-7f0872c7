@@ -1,0 +1,298 @@
+---
+title: Theme variables
+description: Complete reference for all CSS theme variables available in Retype Pro for customizing the visual appearance of your documentation site.
+---
+
+This reference documents all customizable `theme` variables for your `retype.yml`. Each variable can be set independently in `base` (light mode) and `dark` (dark mode) sections.
+
+<Note>
+Theme customization requires a Retype Pro license. You can trial Pro features locally by adding `start: pro: true` to your `retype.yml`.
+</Note>
+
+## Basic usage
+
+```yml retype.yml
+theme:
+  base:
+    base-color: "#8839ef"
+    base-bg: "#eff1f5"
+  dark:
+    base-color: "#ca9ee6"
+    base-bg: "#303446"
+```
+
+See also the [project `theme` configuration](/configuration/project#theme) for how to apply these variables.
+
+---
+
+## Base variables
+
+Core variables that define the fundamental appearance of your site.
+
+| Variable | Description | Default `base` | Default `dark` |
+| --- | --- | --- | --- |
+| `base-color` | Brand color | `#5495f1` | `#5495f1` |
+| `base-white` | Pure white | `#ffffff` | `#ffffff` |
+| `base-black` | Pure black | `#000000` | `#000000` |
+| `base-bg` | Main background color | `base-white` | `dark-900` |
+| `base-text` | Primary text color | `gray-700` | `dark-300` |
+| `base-text-muted` | Muted text color | `gray-400` | `gray-400` |
+| `base-text-strong` | Strong/bold text color | `gray-900` | `base-white` |
+| `base-border` | Default border color | `gray-200` | `dark-650` |
+| `base-border-hover` | Border color on hover | `gray-300` | `gray-550` |
+| `base-border-strong` | Strong border color | `gray-400` | `gray-450` |
+| `base-link` | Link color | `base-500` | `base-500` |
+| `base-link-hover` | Link hover color | `base-800` | `base-300` |
+| `base-link-weight` | Link font weight | `500` | `500` |
+| `base-item-bg-hover` | Item hover background | `base-50` | `dark-600` |
+| `base-item-bg-active` | Active item background | `base-100` | `dark-550` |
+
+---
+
+## Semantic variants
+
+Semantic color variants used across Retype components. Each variant has a full palette from `50` (lightest) to `900` (darkest).
+
+| Variable | Description | Default `base` |
+| --- | --- | --- |
+| `base` | Foundation brand color | `#5495f1` |
+| `primary` | Primary actions and highlights | `#5495f1` |
+| `success` | Success states | `#36ad99` |
+| `danger` | Error and destructive actions | `#e53e3e` |
+| `warning` | Caution and notices | `#edab26` |
+| `royal` | Special emphasis and premium features | `#a667e3` |
+
+Color palette shades follow a consistent pattern:
+- Lower numbers (`50`–`400`) are lighter shades mixed with white
+- The `500` shade is the pure base color for that variant
+- Higher numbers (`600`–`900`) are darker shades mixed with black
+
+### Example: customizing semantic colors
+
+```yml
+theme:
+  base:
+    primary: "#1e66f5"
+    success: "#40a02b"
+    danger:  "#d20f39"
+    warning: "#df8e1d"
+    royal:   "#8839ef"
+```
+
+---
+
+## Gray palette
+
+| Variable | Default |
+| --- | --- |
+| `gray-50` | `#f8f9fc` |
+| `gray-100` | `#f4f6fc` |
+| `gray-200` | `#e4e8f1` |
+| `gray-300` | `#bdc8da` |
+| `gray-400` | `#8693a9` |
+| `gray-500` | `#525e78` |
+| `gray-600` | `#3f4a64` |
+| `gray-700` | `#2c3047` |
+| `gray-800` | `#181d2d` |
+| `gray-900` | `#090d1c` |
+
+---
+
+## Dark mode palette
+
+| Variable | Default |
+| --- | --- |
+| `dark-300` | `#c4c4c4` |
+| `dark-400` | `#616161` |
+| `dark-500` | `#353535` |
+| `dark-600` | `#2d2d2d` |
+| `dark-700` | `#272727` |
+| `dark-800` | `#222222` |
+| `dark-900` | `#121212` |
+
+---
+
+## Header
+
+| Variable | Description | Default `base` | Default `dark` |
+| --- | --- | --- | --- |
+| `header-bg` | Header background | `base-bg` | `base-bg` |
+| `header-border` | Header border color | `base-border` | `base-border` |
+| `header-text` | Header text color | `base-link` | `base-link` |
+| `header-text-hover` | Header text hover | `base-link-hover` | `base-link-hover` |
+
+---
+
+## Sidebar
+
+| Variable | Description | Default `base` | Default `dark` |
+| --- | --- | --- | --- |
+| `sidebar-left-bg` | Left sidebar background | `base-bg` | `base-bg` |
+| `sidebar-left-border` | Left sidebar border | `base-border` | `base-border` |
+| `sidebar-right-bg` | Right sidebar background | `base-bg` | `base-bg` |
+| `sidebar-right-border` | Right sidebar border | `base-border` | `base-border` |
+
+---
+
+## Navigation
+
+| Variable | Description | Default `base` | Default `dark` |
+| --- | --- | --- | --- |
+| `nav-bg` | Navigation background | `sidebar-left-bg` | `sidebar-left-bg` |
+| `nav-item-bg-hover` | Item hover background | `base-item-bg-hover` | `base-item-bg-hover` |
+| `nav-item-bg-active` | Active item background | `base-item-bg-active` | `base-item-bg-active` |
+| `nav-item-text` | Navigation text | `gray-900` | `dark-300` |
+| `nav-item-text-hover` | Navigation hover text | `base-item-text-active` | `base-item-text-active` |
+| `nav-item-text-active` | Active item text | `base-item-text-active` | `base-item-text-active` |
+| `nav-item-text-active-weight` | Active item font weight | `base-link-weight` | `base-link-weight` |
+| `nav-item-border-active` | Active item left border | `base-500` | `base-500` |
+| `nav-item-text-stack` | Stack mode text color | `gray-700` | `base-text-strong` |
+| `nav-item-text-stack-case` | Stack mode text transform | `uppercase` | `uppercase` |
+
+---
+
+## Table of contents
+
+| Variable | Description | Default `base` | Default `dark` |
+| --- | --- | --- | --- |
+| `toc-heading` | TOC heading color | `gray-700` | `dark-400` |
+| `toc-text` | TOC text color | `gray-700` | `dark-300` |
+| `toc-text-hover` | TOC hover text | `base-500` | `base-500` |
+| `toc-text-active` | TOC active text | `base-500` | `base-500` |
+| `toc-border-active` | TOC active border | `base-500` | `base-500` |
+| `toc-heading-case` | TOC heading text transform | `uppercase` | `uppercase` |
+| `toc-heading-weight` | TOC heading font weight | `600` | `600` |
+
+---
+
+## Body and headings
+
+| Variable | Description | Default `base` | Default `dark` |
+| --- | --- | --- | --- |
+| `body-bg` | Main content background | `base-bg` | `base-bg` |
+| `body-text` | Main content text | `base-text` | `base-text` |
+| `body-link` | Body link color | `base-link` | `base-link` |
+| `body-link-hover` | Body link hover | `base-link-hover` | `base-link-hover` |
+
+| Variable | Description | Default `base` | Default `dark` |
+| --- | --- | --- | --- |
+| `heading-text` | Heading text color | `gray-900` | `base-white` |
+| `heading-weight` | Default heading weight | `700` | `700` |
+| `heading-h1-font-size` | H1 font size | `2.5rem` | `2.5rem` |
+| `heading-h2-font-size` | H2 font size | `2rem` | `2rem` |
+| `heading-h3-font-size` | H3 font size | `1.5rem` | `1.5rem` |
+| `heading-h4-font-size` | H4 font size | `1.125rem` | `1.125rem` |
+
+---
+
+## Footer
+
+| Variable | Description | Default `base` | Default `dark` |
+| --- | --- | --- | --- |
+| `footer-text` | Footer text color | `gray-500` | `dark-350` |
+| `footer-link` | Footer link color | `base-link` | `base-link` |
+| `footer-link-hover` | Footer link hover | `base-link-hover` | `base-link-hover` |
+| `footer-link-weight` | Footer link font weight | `base-link-weight` | `base-link-weight` |
+
+---
+
+## Search
+
+| Variable | Description | Default `base` | Default `dark` |
+| --- | --- | --- | --- |
+| `search-text` | Search input text | `base-text` | `base-text` |
+| `search-placeholder` | Search placeholder | `base-text-muted` | `base-text-muted` |
+| `search-bg` | Search input background | `header-bg` | `header-bg` |
+| `search-border` | Search border | `base-border` | `base-border-hover` |
+| `search-border-focus` | Search focus border | `base-border-hover` | `base-border-strong` |
+
+---
+
+## Branding
+
+| Variable | Description | Default `base` | Default `dark` |
+| --- | --- | --- | --- |
+| `branding-label-text` | Label text color | `base-500` | `base-500` |
+| `branding-label-bg` | Label background | `base-50` | `transparent` |
+| `branding-label-border` | Label border color | `base-300` | `base-500` |
+
+---
+
+## Component variables
+
+### Badge
+
+Badge variables follow the pattern `badge-{variant}-{property}`. Supported variants: `base`, `primary`, `secondary`, `success`, `danger`, `warning`, `info`, `light`, `dark`, `ghost`, `contrast`, `question`.
+
+For each variant, the following properties are available:
+
+| Property suffix | Description |
+| --- | --- |
+| (no suffix) | Background color |
+| `-hover` | Hover background |
+| `-text` | Text color |
+| `-text-hover` | Hover text color |
+| `-border` | Border color |
+| `-border-hover` | Hover border color |
+
+Example:
+
+```yml
+theme:
+  base:
+    badge-primary: "#dbeafe"
+    badge-primary-text: "#1e40af"
+    badge-primary-border: "#93c5fd"
+```
+
+### Button
+
+Button variables follow the pattern `button-{variant}-{property}`. Supported variants: `base`, `primary`, `secondary`, `success`, `danger`, `warning`, `info`, `light`, `dark`, `ghost`, `contrast`, `question`.
+
+| Property suffix | Description |
+| --- | --- |
+| (no suffix) | Background color |
+| `-hover` | Hover background |
+| `-text` | Text color |
+
+### Callout
+
+| Variable | Description | Default `base` | Default `dark` |
+| --- | --- | --- | --- |
+| `callout-base-bg` | Base callout background | `base-white` | `dark-800` |
+| `callout-base-border` | Base callout border | `base-border` | `base-border` |
+| `callout-primary` | Primary callout accent | `primary-500` | `primary-500` |
+| `callout-success` | Success callout accent | `success-500` | `success-500` |
+| `callout-danger` | Danger callout accent | `danger-500` | `danger-500` |
+| `callout-warning` | Warning callout accent | `warning-500` | `warning-500` |
+| `callout-tip` | Tip callout accent | `success-400` | `success-400` |
+| `callout-info` | Info callout accent | `base-300` | `base-300` |
+
+### Card
+
+| Variable | Description | Default `base` | Default `dark` |
+| --- | --- | --- | --- |
+| `card-bg` | Card background | `base-bg` | `base-bg` |
+| `card-border` | Card border | `gray-200` | `dark-700` |
+| `card-border-hover` | Card hover border | `gray-400` | `dark-450` |
+| `card-rounded` | Card border radius | `0.5rem` | `0.5rem` |
+| `card-title-text` | Card title color | `base-text-strong` | `base-text-strong` |
+
+### Tab
+
+| Variable | Description | Default `base` | Default `dark` |
+| --- | --- | --- | --- |
+| `tab-text` | Tab text color | `gray-500` | `dark-350` |
+| `tab-text-active` | Active tab text | `base-500` | `base-500` |
+| `tab-border-active` | Active tab underline | `base-500` | `base-500` |
+
+---
+
+## Helper variables
+
+| Variable | Description | Default `base` | Default `dark` |
+| --- | --- | --- | --- |
+| `transparent` | Transparent value | `transparent` | `transparent` |
+| `skeleton-bg` | Skeleton loading background | `gray-200` | `dark-600` |
+| `selection-bg` | Text selection background | `base-200` | `base-700` |
+| `selection-text` | Text selection text color | `base-text-strong` | `base-white` |
